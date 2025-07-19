@@ -6,7 +6,7 @@ export default function RootPage() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        navigate('/home');
+        navigate('/start');
     }, []);
 
     return <>잠시만 기다려주세요.</>

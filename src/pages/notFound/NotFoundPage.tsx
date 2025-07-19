@@ -9,7 +9,7 @@ export default function NotFoundPage() {
 
     return <Flex center width={"100%"} height={"100%"} gap={30}>
         <Text fontSize={28}>잘못된 접근입니다.</Text>
-        <ToHomeButton onClick={() => {navigate("/home")}}>홈으로 돌아가기</ToHomeButton>
+        <ToHomeButton onClick={() => {navigate("/start")}}>시작하러가기</ToHomeButton>
     </Flex>
 }
 
