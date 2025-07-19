@@ -6,7 +6,7 @@ import RoundButton from "../../common/components/RoundButton.tsx";
 import {ButtonAnimation} from "../../common/components/styles/Button.ts";
 import type {RootState} from "../../redux/store.ts";
 import {useDispatch, useSelector} from "react-redux";
-import {setCharacter, setNickname} from "../../redux/userSlice.ts";
+import {setCharacter, setCoin, setNickname} from "../../redux/userSlice.ts";
 import {useNavigate} from "react-router";
 
 export default function StartPage() {
@@ -32,7 +32,18 @@ export default function StartPage() {
             direction === "left"
                 ? (currentIndex - 1 + characters.length) % characters.length
                 : (currentIndex + 1) % characters.length;
-        dispatch(setCharacter(characters[nextIndex]));
+
+        const nextCharacter = characters[nextIndex];
+
+        const characterToCoinMap = {
+            squirrel: "acorn",
+            fox: "fish",
+            raccoon: "mushroom",
+            hedgehog: "blueberry",
+        } as const;
+
+        dispatch(setCharacter(nextCharacter));
+        dispatch(setCoin(characterToCoinMap[nextCharacter]));
     };
 
     const navigate = useNavigate();
