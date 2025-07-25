@@ -4,15 +4,15 @@ import {useSelector} from "react-redux";
 import type {RootState} from "../../redux/store.ts";
 import Header from "../../common/components/Header.tsx";
 import {useState} from "react";
+import SettingModal from "../../common/components/SettingModal.tsx";
 
 export default function HomePage(){
-    // const nickname = useSelector((state: RootState) => state.user.nickname);
-    // const character = useSelector((state: RootState) => state.user.character);
     const coin = useSelector((state: RootState) => state.user.coin);
     const [openSetting, setOpenSetting] = useState<boolean>(false);
 
     return <Wrapper>
         <Header coin={coin} hasCoin hasSetting setOpenSetting={setOpenSetting}/>
+        {openSetting && <SettingModal setOpenSetting={setOpenSetting}/>}
     </Wrapper>
 }
 

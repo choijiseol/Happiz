@@ -14,15 +14,17 @@ export default function StartPage() {
     const dispatch = useDispatch();
     const nickname = useSelector((state: RootState) => state.user.nickname);
     const character = useSelector((state: RootState) => state.user.character);
+    const [inputNickname, setInputNickname] = useState("");
+    const [showWarning, setShowWarning] = useState<boolean>(false);
 
     useEffect(() => {
-        const timer = setTimeout(() => setShowMain(true), 3000);
-        return () => clearTimeout(timer);
-    }, []);
-
-    const handleChangeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
-        dispatch(setNickname(e.target.value));
-    };
+        if (nickname) {
+            setShowMain(true);
+        } else {
+            const timer = setTimeout(() => setShowMain(true), 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [nickname]);
 
     const characters = ["fox", "hedgehog", "raccoon", "squirrel"] as const;
 
@@ -48,20 +50,33 @@ export default function StartPage() {
 
     const navigate = useNavigate();
     const onClickNextButton = () => {
-        navigate("/home");
+        if (nickname.length !== 0) {
+            navigate("/home");
+        } else {
+            if (inputNickname.length !== 0) {
+                dispatch(setNickname(inputNickname));
+                navigate("/home");
+            } else {
+                setShowWarning(true);
+            }
+        }
     }
 
     return <Wrapper center>
-        {showMain
-            ? <MainWrapper>
+        {(showMain) &&
+            <MainWrapper>
                 <AnimatedMain verticalBottom horizontalCenter>
-                    <img src="assets/img/logo.svg" width={100}/>
-                    <Flex gap={10} center>
-                        <Title>닉네임 입력</Title>
-                        <StyledInput placeholder="닉네임을 입력하세요"
-                                     value={nickname}
-                                     onChange={handleChangeNickname}/>
-                    </Flex>
+                    {!nickname && <>
+                        <img src="assets/img/logo.svg" width={100}/>
+                        <Flex gap={10} center style={{position: "relative"}}>
+                            <Title>닉네임 입력</Title>
+                            <StyledInput placeholder="닉네임을 입력하세요"
+                                         value={inputNickname}
+                                         onChange={(e) => setInputNickname(e.target.value)}
+                                         onFocus={() => setShowWarning(false)}/>
+                            {showWarning && <WarningMessage>닉네임을 입력해주세요.</WarningMessage>}
+                        </Flex>
+                    </>}
                     <CharacterWrapper horizontalCenter spaceBetween>
                         <Title>캐릭터 선택</Title>
                         <Flex gap={20} center width={"100%"}>
@@ -77,7 +92,10 @@ export default function StartPage() {
                     </CharacterWrapper>
                 </AnimatedMain>
             </MainWrapper>
-            : <AnimatedLogo src="assets/img/logo.svg"/>}
+        }
+        {(!nickname && !showMain) &&
+            <AnimatedLogo src="assets/img/logo.svg"/>
+        }
     </Wrapper>
 }
 
@@ -150,6 +168,14 @@ const StyledInput = styled.input`
         font-weight: 400;
     }
 `;
+
+const WarningMessage = styled(Text)`
+    font-size: 12px;
+    font-weight: 600;
+    color: #ea3535;
+    position: absolute;
+    bottom: -18px;
+`
 
 const CharacterWrapper = styled(Flex)`
     width: 100%;
