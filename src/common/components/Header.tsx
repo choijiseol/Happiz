@@ -41,7 +41,7 @@ function Coin({coin}: { coin: CoinType }) {
     const money = useSelector((state: RootState) => state.user.money);
 
     return <CoinWrapper row verticalCenter>
-        <img src={`/assets/img/coin/${coin}1.svg`} alt="coin"/>
+        <img src={`/assets/img/coin/${coin}.svg`} alt="coin"/>
         <Text fontSize={24} fontWeight={700} color={"#00496F"} style={{marginTop: 5}}>{money} $</Text>
     </CoinWrapper>
 }

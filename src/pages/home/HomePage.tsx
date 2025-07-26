@@ -31,7 +31,7 @@ export default function HomePage(){
 }
 
 const Wrapper = styled(Flex)`
-    background-image: url("assets/img/main-back.svg");
+    background-image: url("/assets/img/main_back.svg");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;

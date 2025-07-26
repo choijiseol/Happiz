@@ -40,7 +40,7 @@ export default function SettingModal({setOpenSetting}: { setOpenSetting: (set: b
                         <Flex row verticalBottom horizontalCenter gap={36}>
                             <Flex center>
                                 <Tag center>현재 선택</Tag>
-                                <img src={`/assets/img/character/${character}_face.svg`}/>
+                                <img src={`/assets/img/character/${character}_face.svg`} height={100}/>
                             </Flex>
                             <ButtonAnimation onClick={() => navigate('/start')}>
                                 <img src={"/assets/img/icon/change_character.svg"}/>

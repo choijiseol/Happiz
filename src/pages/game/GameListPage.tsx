@@ -22,7 +22,7 @@ export default function GameListPage() {
 }
 
 const Wrapper = styled(Flex)`
-    background-image: url("assets/img/home-back.svg");
+    background-image: url("/assets/img/home_back.svg");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
