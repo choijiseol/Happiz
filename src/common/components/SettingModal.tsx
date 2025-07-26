@@ -64,6 +64,7 @@ const ModalWrapper = styled(Flex)`
     background-color: rgba(255, 255, 255, 0.5);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
+    z-index: 2;
 `
 
 const Modal = styled(Flex)`
