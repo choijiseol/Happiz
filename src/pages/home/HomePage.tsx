@@ -7,21 +7,22 @@ import Header from "../../common/components/Header.tsx";
 import {useState} from "react";
 import SettingModal from "../../common/components/SettingModal.tsx";
 import {ButtonAnimation} from "../../common/components/styles/Button.ts";
+import {useNavigate} from "react-router";
 
 export default function HomePage(){
-    const coin = useSelector((state: RootState) => state.user.coin);
     const [openSetting, setOpenSetting] = useState<boolean>(false);
     const character = useSelector((state: RootState) => state.user.character);
+    const navigate = useNavigate();
 
     return <Wrapper>
-        <Header coin={coin} hasCoin hasSetting setOpenSetting={setOpenSetting}/>
+        <Header hasCoin hasSetting setOpenSetting={setOpenSetting}/>
         {openSetting && <SettingModal setOpenSetting={setOpenSetting}/>}
         <Flex height={"100%"} center gap={30}>
             <ButtonAnimation center>
                 <Text fontSize={24} fontWeight={700} color={"#00496F"} style={{position: "absolute", paddingTop: 74}}>상점</Text>
                 <img src={`/assets/img/character/${character}_cloud.svg`}/>
             </ButtonAnimation>
-            <ButtonAnimation center>
+            <ButtonAnimation center onClick={() => navigate("/list")}>
                 <Text fontSize={24} fontWeight={700} color={"#00496F"} style={{position: "absolute"}}>시작</Text>
                 <img src={"/assets/img/cloud.svg"}/>
             </ButtonAnimation>

@@ -7,14 +7,14 @@ import type {RootState} from "../../redux/store.ts";
 import {ButtonAnimation} from "./styles/Button.ts";
 import {useNavigate} from "react-router";
 
-export default function Header({coin, hasCoin, hasSetting, hasBefore, setOpenSetting}: {
-    coin: CoinType,
+export default function Header({hasCoin, hasSetting, hasBefore, setOpenSetting}: {
     hasCoin?: boolean,
     hasSetting?: boolean,
     hasBefore?: boolean,
     setOpenSetting?: (set: boolean) => void
 }) {
     const navigate = useNavigate();
+    const coin = useSelector((state: RootState) => state.user.coin);
 
     return <Wrapper row spaceBetween>
         {hasBefore &&
