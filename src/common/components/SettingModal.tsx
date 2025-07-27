@@ -68,7 +68,7 @@ const ModalWrapper = styled(Flex)`
 `
 
 const Modal = styled(Flex)`
-    width: 320px;
+    width: 280px;
     height: 400px;
     background-color: #FFFFFF;
     border-radius: 10px;

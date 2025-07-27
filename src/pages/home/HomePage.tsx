@@ -18,7 +18,7 @@ export default function HomePage(){
         <Header hasCoin hasSetting setOpenSetting={setOpenSetting}/>
         {openSetting && <SettingModal setOpenSetting={setOpenSetting}/>}
         <Flex height={"100%"} center gap={30}>
-            <ButtonAnimation center>
+            <ButtonAnimation center onClick={() => navigate("/store")}>
                 <Text fontSize={24} fontWeight={700} color={"#00496F"} style={{position: "absolute", paddingTop: 74}}>상점</Text>
                 <img src={`/assets/img/character/${character}_cloud.svg`}/>
             </ButtonAnimation>
