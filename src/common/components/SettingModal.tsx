@@ -18,6 +18,7 @@ export default function SettingModal({setOpenSetting}: { setOpenSetting: (set: b
         if (confirmed) {
             dispatch(setNickname(""));
             dispatch(setCharacter("squirrel"));
+            localStorage.removeItem("currentUser");
             navigate('/start');
         }
     };

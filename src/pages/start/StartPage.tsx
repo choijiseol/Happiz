@@ -51,19 +51,37 @@ export default function StartPage() {
     const navigate = useNavigate();
     const onClickNextButton = () => {
         if (nickname.length !== 0) {
+            localStorage.setItem("currentUser", nickname);
             navigate("/home");
         } else {
-            if (inputNickname.length !== 0) {
-                dispatch(setNickname(inputNickname));
-                navigate("/home");
-            } else {
+            if (inputNickname.length === 0) {
                 setShowWarning(true);
+                return;
             }
+
+            const stored = localStorage.getItem("user");
+            const users: { nickname: string; character: string; coin: number }[] = stored
+                ? JSON.parse(stored)
+                : [];
+
+            const isDuplicate = users.some(u => u.nickname === inputNickname);
+            if (isDuplicate) {
+                setShowWarning(true);
+                return;
+            }
+
+            dispatch(setNickname(inputNickname));
+            users.push({nickname: inputNickname, character, coin: 0});
+            localStorage.setItem("user", JSON.stringify(users));
+
+            localStorage.setItem("currentUser", inputNickname);
+
+            navigate("/home");
         }
-    }
+    };
 
     return <Wrapper center>
-        {(showMain) &&
+        {showMain &&
             <MainWrapper>
                 <AnimatedMain verticalBottom horizontalCenter>
                     {!nickname && <>
@@ -74,7 +92,10 @@ export default function StartPage() {
                                          value={inputNickname}
                                          onChange={(e) => setInputNickname(e.target.value)}
                                          onFocus={() => setShowWarning(false)}/>
-                            {showWarning && <WarningMessage>닉네임을 입력해주세요.</WarningMessage>}
+                            {(showWarning && inputNickname.length === 0)
+                                ? <WarningMessage>닉네임을 입력해주세요.</WarningMessage>
+                                : showWarning ? <WarningMessage>이미 존재하는 닉네임입니다.</WarningMessage>
+                            : <></>}
                         </Flex>
                     </>}
                     <CharacterWrapper horizontalCenter spaceBetween>

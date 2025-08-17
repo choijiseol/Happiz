@@ -32,7 +32,7 @@ export default function ColorGamePage() {
     }, [colorLevel]);
 
     const randomColorPair = useMemo(() => {
-        if (isClear !== "PLAY") return {main: "#FFFFFF", diff: "#FFFFFF"}
+        if (isClear !== "PLAY") return {main: "#979797", diff: "#979797"}
         const pair = levelData.color[Math.floor(Math.random() * levelData.color.length)];
         return Math.random() > 0.5
             ? {main: pair.color1, diff: pair.color2}
@@ -92,7 +92,7 @@ export default function ColorGamePage() {
         {!start && isClear === "PLAY" && <ReadyModal/>}
         {isClear !== "PLAY" &&
             <FinichModal fall={isClear === "FALL" || end} clear={isClear === "CLEAR" && !end}
-                         gameFinish={colorLevel === 10} setStart={setStart}
+                         gameFinish={isClear === "CLEAR" && colorLevel === 10} setStart={setStart}
                          setIsClear={setIsClear} levelCoin={levelData.coin}/>}
         <Flex gap={15} center>
             <GameLevelText level={colorLevel}/>
