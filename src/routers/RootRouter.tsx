@@ -6,6 +6,7 @@ import StartPage from "../pages/start/StartPage.tsx";
 import GameListPage from "../pages/game/GameListPage.tsx";
 import GameGuidPage from "../pages/game/GameGuidPage.tsx";
 import StorePage from "../pages/store/StorePage.tsx";
+import GamePage from "../pages/game/GamePage.tsx";
 
 export default function RootRouter() {
     return <BrowserRouter>
@@ -15,7 +16,8 @@ export default function RootRouter() {
             <Route path={"/home"} element={<HomePage/>}/>
             <Route path={"/list"} element={<GameListPage/>}/>
             <Route path="/store" element={<StorePage/>} />
-            <Route path="/game/:type" element={<GameGuidPage/>} />
+            <Route path="/game/:type" element={<GameGuidPage/>}/>
+            <Route path="/game/:type/play" element={<GamePage/>}/>
             <Route path={"*"} element={<NotFoundPage/>}/>
         </Routes>
     </BrowserRouter>

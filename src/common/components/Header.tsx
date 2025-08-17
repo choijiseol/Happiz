@@ -2,23 +2,31 @@ import styled from "styled-components";
 import Flex from "./Flex.tsx";
 import Text from "./Text.tsx";
 import type {CoinType} from "../../redux/userSlice.ts";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import type {RootState} from "../../redux/store.ts";
 import {ButtonAnimation} from "./styles/Button.ts";
 import {useNavigate} from "react-router";
+import {setColorLevel} from "../../redux/gameSlice.ts";
 
-export default function Header({hasCoin, hasSetting, hasBefore, setOpenSetting}: {
+export default function Header({hasCoin, hasSetting, hasBefore, isGame, setOpenSetting}: {
     hasCoin?: boolean,
     hasSetting?: boolean,
     hasBefore?: boolean,
+    isGame?: boolean,
     setOpenSetting?: (set: boolean) => void
 }) {
     const navigate = useNavigate();
     const coin = useSelector((state: RootState) => state.user.coin);
 
+    const dispatch = useDispatch();
+    const onClickBefore = () => {
+        if(isGame) dispatch(setColorLevel(1));
+        navigate(-1);
+    }
+
     return <Wrapper row spaceBetween>
         {hasBefore &&
-            <ButtonAnimation onClick={() => navigate(-1)}>
+            <ButtonAnimation onClick={onClickBefore}>
                 <img src={"/assets/img/icon/before-arrow.svg"} alt={"전"}/>
             </ButtonAnimation>
         }

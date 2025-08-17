@@ -1,4 +1,4 @@
-import {useParams} from "react-router";
+import {useNavigate, useParams} from "react-router";
 import {games, type GameType} from "../../data/gameData.ts";
 import styled from "styled-components";
 import Flex from "../../common/components/Flex.tsx";
@@ -180,6 +180,7 @@ const gameCoinGuides: Record<GameType, (coin: CoinType) => React.ReactNode> = {
 
 export default function GameGuidPage() {
     const {type} = useParams();
+    const navigate = useNavigate();
     const game = games[type as keyof typeof games];
     const guide = gameGuides[type as GameType];
     const coin = useSelector((state: RootState) => state.user.coin);
@@ -200,7 +201,9 @@ export default function GameGuidPage() {
                         {coinGuide}
                     </CointGuidWrapper>
                 </CoinWrapper>
-                <RoundButton text={"선택"}/>
+                <Flex onClick={() => navigate(`/game/${type}/play`)}>
+                    <RoundButton text={"선택"}/>
+                </Flex>
             </ModalWrapper>
         </Flex>
     </Wrapper>
