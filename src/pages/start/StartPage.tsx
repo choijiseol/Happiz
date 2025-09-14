@@ -98,6 +98,7 @@ export default function StartPage() {
 
         const newUser = { nickname: inputNickname, character, money: 0 };
         dispatch(setNickname(inputNickname));
+        dispatch(setCoin(characterToCoinMap[character]));
         saveUsersToStorage([...users, newUser]);
         localStorage.setItem("currentUser", inputNickname);
 

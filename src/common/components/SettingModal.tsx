@@ -5,7 +5,7 @@ import {ButtonAnimation} from "./styles/Button.ts";
 import {useDispatch, useSelector} from "react-redux";
 import type {RootState} from "../../redux/store.ts";
 import {useNavigate} from "react-router";
-import {setCharacter, setNickname} from "../../redux/userSlice.ts";
+import {setCharacter, setNickname, type User} from "../../redux/userSlice.ts";
 
 export default function SettingModal({setOpenSetting}: { setOpenSetting: (set: boolean) => void }) {
     const nickname = useSelector((state: RootState) => state.user.nickname);
@@ -15,13 +15,30 @@ export default function SettingModal({setOpenSetting}: { setOpenSetting: (set: b
 
     const onClickLogout = () => {
         const confirmed = window.confirm('로그아웃 하시겠습니까?');
-        if (confirmed) {
-            dispatch(setNickname(""));
-            dispatch(setCharacter("squirrel"));
-            localStorage.removeItem("currentUser");
-            navigate('/start');
-        }
+        if (!confirmed) return;
+        dispatch(setNickname(""));
+        dispatch(setCharacter("squirrel"));
+        localStorage.removeItem("currentUser");
+        navigate('/start');
     };
+
+    const onClickSecession = () => {
+        const confirmed = window.confirm('탈퇴 하시겠습니까? 한 번 탈퇴한 계정은 복구 불가합니다.');
+        if(!confirmed) return;
+
+        const stored = localStorage.getItem("user");
+
+        if (!stored) return;
+
+        const users: User[] = JSON.parse(stored);
+        const filteredUsers = users.filter(u => u.nickname !== nickname);
+
+        dispatch(setNickname(""));
+        dispatch(setCharacter("squirrel"));
+        localStorage.setItem("user", JSON.stringify(filteredUsers));
+        localStorage.removeItem("currentUser");
+        navigate('/start');
+    }
 
     return <ModalWrapper center onClick={() => setOpenSetting(false)}>
         <Modal onClick={(e) => e.stopPropagation()}>
@@ -50,7 +67,7 @@ export default function SettingModal({setOpenSetting}: { setOpenSetting: (set: b
                     </BlueWrapper>
                 </Flex>
                 <Flex gap={10}>
-                    <Button center>초기화</Button>
+                    <Button center onClick={onClickSecession}>탈퇴</Button>
                     <Button center onClick={onClickLogout}>로그아웃</Button>
                 </Flex>
             </Flex>

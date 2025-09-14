@@ -5,6 +5,12 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 export type CharacterType = "fox" | "hedgehog" | "raccoon" | "squirrel";
 export type CoinType = "acorn" | "blueberry" | "fish" | "mushroom";
 
+export type User = {
+    nickname: string;
+    character: CharacterType;
+    money: number;
+};
+
 interface UserState {
     nickname: string;
     character: CharacterType;
