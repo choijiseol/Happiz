@@ -5,9 +5,9 @@ import {useState, useEffect, useMemo} from "react";
 import GameTimer from "./components/GameTimer.tsx";
 import ReadyModal from "./components/ReadyModal.tsx";
 import {colorData} from "./data/ColorData.ts";
-import FinichModal from "./components/FinishModal.tsx";
 import {useSelector} from "react-redux";
 import type {RootState} from "../../redux/store.ts";
+import FinishModal from "./components/FinishModal.tsx";
 
 export default function ColorGamePage() {
     const colorLevel = useSelector((state: RootState) => state.game.colorLevel);
@@ -91,7 +91,7 @@ export default function ColorGamePage() {
     return <Flex center gap={26} height={"100%"}>
         {!start && isClear === "PLAY" && <ReadyModal/>}
         {isClear !== "PLAY" &&
-            <FinichModal fall={isClear === "FALL" || end} clear={isClear === "CLEAR" && !end}
+            <FinishModal fall={isClear === "FALL" || end} clear={isClear === "CLEAR" && !end}
                          gameFinish={isClear === "CLEAR" && colorLevel === 10} setStart={setStart}
                          setIsClear={setIsClear} levelCoin={levelData.coin}/>}
         <Flex gap={15} center>

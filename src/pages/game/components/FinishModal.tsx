@@ -23,6 +23,7 @@ export default function FinishModal({fall, clear, levelCoin, gameFinish, setStar
     const colorLevel = useSelector((state: RootState) => state.game.colorLevel);
     const coin = useSelector((state: RootState) => state.user.coin);
     const money = useSelector((state: RootState) => state.user.money);
+    const nickname = useSelector((state: RootState) => state.user.nickname);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -33,8 +34,21 @@ export default function FinishModal({fall, clear, levelCoin, gameFinish, setStar
     }
 
     useEffect(() => {
-        if (clear) dispatch(setMoney(money + levelCoin));
+        if (clear) {
+            const newMoney = money + levelCoin;
+            dispatch(setMoney(newMoney));
+
+            const users = JSON.parse(localStorage.getItem("user") || "[]");
+
+            if (nickname && users.length > 0) {
+                const updatedUsers = users.map((u: { nickname: string; character: string; money: number }) =>
+                    u.nickname === nickname ? { ...u, money: newMoney } : u
+                );
+                localStorage.setItem("user", JSON.stringify(updatedUsers));
+            }
+        }
     }, [clear]);
+
 
     return <ModalBack>
         <Header hasBefore={true}/>
