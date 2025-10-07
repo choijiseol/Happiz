@@ -8,10 +8,11 @@ import {ButtonAnimation} from "./styles/Button.ts";
 import {useNavigate} from "react-router";
 import {setColorLevel} from "../../redux/gameSlice.ts";
 
-export default function Header({hasCoin, hasSetting, hasBefore, isGame, setOpenSetting}: {
+export default function Header({hasCoin, hasSetting, hasBefore, hasSave, isGame, setOpenSetting}: {
     hasCoin?: boolean,
     hasSetting?: boolean,
     hasBefore?: boolean,
+    hasSave?: boolean
     isGame?: boolean,
     setOpenSetting?: (set: boolean) => void
 }) {
@@ -24,6 +25,10 @@ export default function Header({hasCoin, hasSetting, hasBefore, isGame, setOpenS
         navigate(-1);
     }
 
+    const onClickSave = () => {
+
+    }
+
     return <Wrapper row spaceBetween>
         {hasBefore &&
             <ButtonAnimation onClick={onClickBefore}>
@@ -31,6 +36,7 @@ export default function Header({hasCoin, hasSetting, hasBefore, isGame, setOpenS
             </ButtonAnimation>
         }
         {hasCoin && <Coin coin={coin}/>}
+        {hasSave && <SaveButton center onClick={onClickSave}>저장</SaveButton>}
         {hasSetting &&
             <ButtonAnimation onClick={() => setOpenSetting && setOpenSetting(true)}>
                 <img src={"/assets/img/icon/setting.svg"} alt={"설정"}/>
@@ -43,7 +49,18 @@ const Wrapper = styled(Flex)`
     width: calc(100% - 40px);
     position: absolute;
     padding: 20px;
+    z-index: 3;
 `;
+
+const SaveButton = styled(ButtonAnimation)`
+     width: 80px;
+    height: 40px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    font-size: 18px;
+    font-weight: 600;
+    color: #000000;
+`
 
 function Coin({coin}: { coin: CoinType }) {
     const money = useSelector((state: RootState) => state.user.money);

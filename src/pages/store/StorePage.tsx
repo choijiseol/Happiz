@@ -2,14 +2,20 @@ import styled from "styled-components";
 import Flex from "../../common/components/Flex.tsx";
 import Header from "../../common/components/Header.tsx";
 import Text from "../../common/components/Text.tsx";
-import {useState} from "react";
+import {useMemo, useState} from "react";
 import {ButtonAnimation} from "../../common/components/styles/Button.ts";
 import {useSelector} from "react-redux";
 import type {RootState} from "../../redux/store.ts";
+import {useNavigate} from "react-router";
+import {AccessoriesData, ClothesData, HeadData, type WearingItem} from "../../data/wearingData.ts";
+
+type MergedItem = { type: "button" } | WearingItem;
 
 export default function StorePage() {
     const [store, setStore] = useState<"main" | "clothes" | "head" | "accessories" | "item">("main");
     const coin = useSelector((state: RootState) => state.user.coin);
+    const character = useSelector((state: RootState) => state.user.character);
+    const navigate = useNavigate();
 
     const signboardText = store === "main" ? "상점"
         : store === "clothes" ? "옷"
@@ -17,17 +23,46 @@ export default function StorePage() {
                 : store === "accessories" ? "액세서리"
                     : store === "item" ? "아이템" : "상점";
 
+    const List = useMemo(() => {
+        return store === "clothes"
+            ? ClothesData
+            : store === "head"
+                ? HeadData
+                : store === "accessories"
+                    ? AccessoriesData
+                    : null;
+    }, [store]);
+
+    const clothesList: WearingItem[] = List?.map((item) => ({
+        ...item,
+        type: "wearing",
+    })) ?? [];
+    
+    const mergedList: MergedItem[] = [
+        {type: "button"},
+        ...clothesList,
+    ];
+
     return <Wrapper>
+        <BackBlur/>
         <Header hasBefore hasCoin/>
+        <GoDressWrapper>
+            <Flex width={"100%"} style={{position: "relative"}} onClick={() => navigate('/store/weare')}>
+                <img src={"/assets/img/store/speech-bubble.svg"} width={132}
+                     style={{position: "absolute", bottom: 20, right: 155}}/>
+                <img src={`/assets/img/character/${character}1.png`} height={203}
+                     style={{position: "absolute", bottom: -60, right: 10}}/>
+            </Flex>
+        </GoDressWrapper>
         <Flex center height={"100%"}>
-            <Flex center width={448} height={548} style={{position: "relative"}}>
+            <Flex center width={448} height={548} style={{position: "relative", zIndex: 3}}>
                 <img src={"/assets/img/store/store.svg"} alt="store" width={448}/>
                 <Signboard center>
                     {signboardText}
                 </Signboard>
                 <StoreWrapper row horizontalCenter>
                     {store === "main"
-                        ? <Flex gap={20} center height={"100%"}>
+                        ? <Flex gap={10} height={"100%"}>
                             <Flex row gap={20}>
                                 <ButtonAnimation onClick={() => setStore("clothes")}>
                                     <img src={"/assets/img/store/clothes_paper.svg"} alt={"옷"}/>
@@ -45,24 +80,28 @@ export default function StorePage() {
                                 </ButtonAnimation>
                             </Flex>
                         </Flex>
-                        : ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"].map((_, idx) => {
-                            return <StoreItemWrapper isFirstIdx={idx === 0}>
-                                {idx === 0
-                                    ? <ButtonAnimation onClick={() => setStore("main")}>
-                                        <img src={"/assets/img/store/store_signboard.svg"}
-                                             style={{position: "absolute", left: -20, top: 15}}/>
-                                    </ButtonAnimation>
-                                    : <Flex>
-                                        <Flex width={"100%"} height={20} row gap={4} center
-                                              style={{position: "absolute", backgroundColor: "#FFFFFF", bottom: 0}}>
-                                            <img src={`/assets/img/coin/${coin}.svg`} height={14}/>
-                                            <Text>0000</Text>
-                                        </Flex>
+                        : mergedList && mergedList.map((item, idx) => {
+                        return <StoreItemWrapper isFirstIdx={idx === 0}>
+                            {idx === 0 ? <ButtonAnimation onClick={() => setStore("main")}>
+                                    <img src={"/assets/img/store/store_signboard.svg"}
+                                         style={{position: "absolute", left: -20, top: 15}}/>
+                                </ButtonAnimation>
+                                : item.type !== "button" &&
+                                <Flex center height={"calc(100% - 20px)"}>
+                                    <img src={`/assets/img/store/weare/${store}/${item.name}.svg`}
+                                         style={{
+                                             height: store === "accessories" ? 60 : "auto",
+                                             scale: store === "head" ? 0.7 : 1
+                                         }}/>
+                                    <Flex width={"100%"} height={20} row gap={4} center
+                                          style={{position: "absolute", backgroundColor: "#FFFFFF", bottom: 0}}>
+                                        <img src={`/assets/img/coin/${coin}.svg`} height={14}/>
+                                        <Text>{item.price}</Text>
                                     </Flex>
-                                }
-                            </StoreItemWrapper>
-                        })
-                    }
+                                </Flex>
+                            }
+                        </StoreItemWrapper>
+                    })}
                 </StoreWrapper>
             </Flex>
         </Flex>
@@ -78,6 +117,25 @@ const Wrapper = styled(Flex)`
     height: 100%;
     z-index: 1;
     overflow: hidden;
+`
+
+const BackBlur = styled(Flex)`
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(255, 255, 255, 0.5);
+    filter: blur(4px);
+    z-index: 1;
+`
+
+const GoDressWrapper = styled(Flex)`
+    width: 100%;
+    z-index: 4;
+    position: fixed;
+    bottom: 0;
+    cursor: pointer;
 `
 
 const Signboard = styled(Flex)`
