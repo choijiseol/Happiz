@@ -8,11 +8,14 @@ import {useSelector} from "react-redux";
 import type {RootState} from "../../redux/store.ts";
 import {useNavigate} from "react-router";
 import {AccessoriesData, ClothesData, HeadData, type WearingItem} from "../../data/wearingData.ts";
+import PurchaseModal from "./components/PurchaseModal.tsx";
 
 type MergedItem = { type: "button" } | WearingItem;
 
 export default function StorePage() {
     const [store, setStore] = useState<"main" | "clothes" | "head" | "accessories" | "item">("main");
+    const [openPurchase, setOpenPurchase] = useState<boolean>(false);
+    const [selectedItem, setSelectedItem] = useState<WearingItem | null>(null);
     const coin = useSelector((state: RootState) => state.user.coin);
     const character = useSelector((state: RootState) => state.user.character);
     const navigate = useNavigate();
@@ -37,7 +40,7 @@ export default function StorePage() {
         ...item,
         type: "wearing",
     })) ?? [];
-    
+
     const mergedList: MergedItem[] = [
         {type: "button"},
         ...clothesList,
@@ -45,7 +48,7 @@ export default function StorePage() {
 
     return <Wrapper>
         <BackBlur/>
-        <Header hasBefore hasCoin/>
+        <Header hasBefore hasCoin setOpenPurchase={store === "main" ? null : setOpenPurchase}/>
         <GoDressWrapper>
             <Flex width={"100%"} style={{position: "relative"}} onClick={() => navigate('/store/weare')}>
                 <img src={"/assets/img/store/speech-bubble.svg"} width={132}
@@ -64,10 +67,10 @@ export default function StorePage() {
                     {store === "main"
                         ? <Flex gap={10} height={"100%"}>
                             <Flex row gap={20}>
-                                <ButtonAnimation onClick={() => setStore("clothes")}>
+                                <ButtonAnimation onClick={() => setStore("clothes")} style={{paddingTop: 5}}>
                                     <img src={"/assets/img/store/clothes_paper.svg"} alt={"옷"}/>
                                 </ButtonAnimation>
-                                <ButtonAnimation onClick={() => setStore("head")}>
+                                <ButtonAnimation onClick={() => setStore("head")} style={{paddingTop: 5}}>
                                     <img src={"/assets/img/store/head_paper.svg"} alt={"머리 장식"}/>
                                 </ButtonAnimation>
                             </Flex>
@@ -81,7 +84,15 @@ export default function StorePage() {
                             </Flex>
                         </Flex>
                         : mergedList && mergedList.map((item, idx) => {
-                        return <StoreItemWrapper isFirstIdx={idx === 0}>
+                        const purchaseCompleted = false;
+
+                        return <StoreItemWrapper isFirstIdx={idx === 0} purchaseCompleted={purchaseCompleted}
+                        onClick={() => {
+                            if(!purchaseCompleted && item.type !== "button"){
+                                setOpenPurchase(true)
+                                setSelectedItem(item);
+                            }
+                        }}>
                             {idx === 0 ? <ButtonAnimation onClick={() => setStore("main")}>
                                     <img src={"/assets/img/store/store_signboard.svg"}
                                          style={{position: "absolute", left: -20, top: 15}}/>
@@ -95,16 +106,20 @@ export default function StorePage() {
                                          }}/>
                                     <Flex width={"100%"} height={20} row gap={4} center
                                           style={{position: "absolute", backgroundColor: "#FFFFFF", bottom: 0}}>
-                                        <img src={`/assets/img/coin/${coin}.svg`} height={14}/>
-                                        <Text>{item.price}</Text>
+                                        {!purchaseCompleted && <img src={`/assets/img/coin/${coin}.svg`} height={14}/>}
+                                        <Text>{purchaseCompleted ? "구매완료" : item.price}</Text>
                                     </Flex>
                                 </Flex>
+                            }
+                            {idx !== 0 && purchaseCompleted &&
+                                <PurchaseCompleted/>
                             }
                         </StoreItemWrapper>
                     })}
                 </StoreWrapper>
             </Flex>
         </Flex>
+        {openPurchase && <PurchaseModal selectedItem={selectedItem} store={store}/>}
     </Wrapper>
 }
 
@@ -173,9 +188,17 @@ const StoreWrapper = styled(Flex)`
     }
 `
 
-const StoreItemWrapper = styled(Flex)<{ isFirstIdx: boolean }>`
+const StoreItemWrapper = styled(Flex)<{ isFirstIdx: boolean, purchaseCompleted: boolean }>`
     height: 110px;
     width: 100px;
     background-color: ${({isFirstIdx}) => isFirstIdx ? "transparent" : "#FEE3BF"};
     position: relative;
+    cursor: ${({purchaseCompleted}) => purchaseCompleted ? "auto" : "pointer"};
+`
+
+const PurchaseCompleted = styled(Flex)`
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
 `

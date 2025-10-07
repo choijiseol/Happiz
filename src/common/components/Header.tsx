@@ -8,21 +8,23 @@ import {ButtonAnimation} from "./styles/Button.ts";
 import {useNavigate} from "react-router";
 import {setColorLevel} from "../../redux/gameSlice.ts";
 
-export default function Header({hasCoin, hasSetting, hasBefore, hasSave, isGame, setOpenSetting}: {
+export default function Header({hasCoin, hasSetting, hasBefore, hasSave, isGame, setOpenSetting, setOpenPurchase}: {
     hasCoin?: boolean,
     hasSetting?: boolean,
     hasBefore?: boolean,
     hasSave?: boolean
     isGame?: boolean,
-    setOpenSetting?: (set: boolean) => void
+    setOpenSetting?: (set: boolean) => void,
+    setOpenPurchase?: React.Dispatch<React.SetStateAction<boolean>> | null
 }) {
     const navigate = useNavigate();
     const coin = useSelector((state: RootState) => state.user.coin);
 
     const dispatch = useDispatch();
     const onClickBefore = () => {
-        if(isGame) dispatch(setColorLevel(1));
-        navigate(-1);
+        if (isGame) dispatch(setColorLevel(1));
+        if(setOpenPurchase) setOpenPurchase(false);
+        else navigate(-1);
     }
 
     const onClickSave = () => {
@@ -49,11 +51,11 @@ const Wrapper = styled(Flex)`
     width: calc(100% - 40px);
     position: absolute;
     padding: 20px;
-    z-index: 3;
+    z-index: 5;
 `;
 
 const SaveButton = styled(ButtonAnimation)`
-     width: 80px;
+    width: 80px;
     height: 40px;
     border-radius: 10px;
     background-color: #ffffff;
