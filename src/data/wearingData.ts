@@ -4,6 +4,8 @@ export interface WearingItem {
     price: number;
 }
 
+export type MergedItem = { type: "button" } | WearingItem;
+
 export const ClothesData = [
     {name: "shoulder_strap1", price: 50},
     {name: "shoulder_strap2", price: 50},

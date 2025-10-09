@@ -7,10 +7,8 @@ import {ButtonAnimation} from "../../common/components/styles/Button.ts";
 import {useSelector} from "react-redux";
 import type {RootState} from "../../redux/store.ts";
 import {useNavigate} from "react-router";
-import {AccessoriesData, ClothesData, HeadData, type WearingItem} from "../../data/wearingData.ts";
+import {AccessoriesData, ClothesData, HeadData, type MergedItem, type WearingItem} from "../../data/wearingData.ts";
 import PurchaseModal from "./components/PurchaseModal.tsx";
-
-type MergedItem = { type: "button" } | WearingItem;
 
 export default function StorePage() {
     const [store, setStore] = useState<"main" | "clothes" | "head" | "accessories" | "item">("main");
@@ -88,7 +86,7 @@ export default function StorePage() {
                                 </ButtonAnimation>
                             </Flex>
                             <Flex row gap={20}>
-                                <ButtonAnimation onClick={() => setStore("accessories")}>
+                            <ButtonAnimation onClick={() => setStore("accessories")}>
                                     <img src={"/assets/img/store/accessories_paper.svg"} alt={"액세서리"}/>
                                 </ButtonAnimation>
                                 <ButtonAnimation onClick={() => setStore("item")}>
