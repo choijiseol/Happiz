@@ -1,19 +1,63 @@
 import styled from "styled-components";
 import Flex from "../../../common/components/Flex.tsx";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import type {RootState} from "../../../redux/store.ts";
 import type {WearingItem} from "../../../data/wearingData.ts";
 import {ButtonAnimation} from "../../../common/components/styles/Button.ts";
 import Text from "../../../common/components/Text.tsx";
+import {setBuyItem, setMoney, type User} from "../../../redux/userSlice.ts";
 
-export default function PurchaseModal({selectedItem, store}: { selectedItem: WearingItem | null, store: string }) {
+export default function PurchaseModal({selectedItem, store, setOpenPurchase}: {
+    selectedItem: WearingItem | null,
+    store: string,
+    setOpenPurchase: React.Dispatch<React.SetStateAction<boolean>>
+}) {
+    const dispatch = useDispatch();
     const money = useSelector((state: RootState) => state.user.money);
     const coin = useSelector((state: RootState) => state.user.coin);
+    const buyItem = useSelector((state: RootState) => state.user.buyItem);
+    const nickname = useSelector((state: RootState) => state.user.nickname);
 
     const canPurchase = money >= (selectedItem?.price ?? 0);
 
     const onClickPurchase = () => {
-        if(!canPurchase) return;
+        if (!canPurchase || !selectedItem) return;
+
+        let updatedBuyItem = {...buyItem};
+
+        if (store === "clothes") {
+            updatedBuyItem = {
+                ...buyItem,
+                clothes: [...buyItem.clothes, selectedItem.name],
+            };
+        } else if (store === "head") {
+            updatedBuyItem = {
+                ...buyItem,
+                head: [...buyItem.head, selectedItem.name],
+            };
+        } else if (store === "accessories") {
+            updatedBuyItem = {
+                ...buyItem,
+                accessories: [...buyItem.accessories, selectedItem.name],
+            };
+        } else return;
+
+        const newMoney = money - selectedItem.price;
+
+        dispatch(setBuyItem(updatedBuyItem));
+        dispatch(setMoney(newMoney));
+
+        const users = JSON.parse(localStorage.getItem("user") || "[]");
+
+        if (nickname && users.length > 0) {
+            const updatedUsers = users.map((u: User) =>
+                u.nickname === nickname
+                    ? {...u, buyItem: updatedBuyItem, money: newMoney}
+                    : u
+            );
+            localStorage.setItem("user", JSON.stringify(updatedUsers));
+        }
+        setOpenPurchase(false);
     }
 
     return <Wrapper center gap={20}>
@@ -64,13 +108,13 @@ const PriceWrapper = styled(Flex)`
     color: #000000;
 `
 
-const PurchaseButton = styled(ButtonAnimation)<{canPurchase: boolean}>`
+const PurchaseButton = styled(ButtonAnimation)<{ canPurchase: boolean }>`
     width: 80px;
     height: 40px;
     cursor: ${({canPurchase}) => canPurchase ? "pointer" : "auto"};
     background-color: ${({canPurchase}) => canPurchase ? "#ffffff" : "rgba(255,255,255,0.4)"};
     border-radius: 10px;
-    
+
     font-size: 18px;
     font-weight: 600;
     color: #000000;

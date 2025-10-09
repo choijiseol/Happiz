@@ -46,9 +46,22 @@ export default function StorePage() {
         ...clothesList,
     ];
 
+    const buyItem = useSelector((state: RootState) => state.user.buyItem);
+    const checkPurchased = (item: WearingItem): boolean => {
+        if (!buyItem) return false;
+        if (store === "clothes") {
+            return buyItem.clothes.includes(item.name);
+        } else if (store === "head") {
+            return buyItem.head.includes(item.name);
+        } else if (store === "accessories") {
+            return buyItem.accessories.includes(item.name);
+        }
+        return false;
+    };
+
     return <Wrapper>
         <BackBlur/>
-        <Header hasBefore hasCoin setOpenPurchase={store === "main" ? null : setOpenPurchase}/>
+        <Header hasBefore hasCoin setOpenPurchase={(store === "main" || !openPurchase) ? null : setOpenPurchase}/>
         <GoDressWrapper>
             <Flex width={"100%"} style={{position: "relative"}} onClick={() => navigate('/store/weare')}>
                 <img src={"/assets/img/store/speech-bubble.svg"} width={132}
@@ -84,7 +97,8 @@ export default function StorePage() {
                             </Flex>
                         </Flex>
                         : mergedList && mergedList.map((item, idx) => {
-                        const purchaseCompleted = false;
+                        const purchaseCompleted =
+                            item.type !== "button" ? checkPurchased(item) : false;
 
                         return <StoreItemWrapper isFirstIdx={idx === 0} purchaseCompleted={purchaseCompleted}
                         onClick={() => {
@@ -119,7 +133,7 @@ export default function StorePage() {
                 </StoreWrapper>
             </Flex>
         </Flex>
-        {openPurchase && <PurchaseModal selectedItem={selectedItem} store={store}/>}
+        {openPurchase && <PurchaseModal selectedItem={selectedItem} store={store} setOpenPurchase={setOpenPurchase}/>}
     </Wrapper>
 }
 

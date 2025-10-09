@@ -6,7 +6,14 @@ import RoundButton from "../../common/components/RoundButton.tsx";
 import {ButtonAnimation} from "../../common/components/styles/Button.ts";
 import type {RootState} from "../../redux/store.ts";
 import {useDispatch, useSelector} from "react-redux";
-import {type CharacterType, setCharacter, setCoin, setMoney, setNickname} from "../../redux/userSlice.ts";
+import {
+    setBuyItem,
+    setCharacter,
+    setCoin,
+    setMoney,
+    setNickname,
+    setWearingItem, type User
+} from "../../redux/userSlice.ts";
 import {useNavigate} from "react-router";
 
 const characters = ["fox", "hedgehog", "raccoon", "squirrel"] as const;
@@ -17,12 +24,6 @@ const characterToCoinMap = {
     raccoon: "mushroom",
     hedgehog: "blueberry",
 } as const;
-
-type User = {
-    nickname: string;
-    character: CharacterType;
-    money: number;
-};
 
 const getUsersFromStorage = () => {
     const stored = localStorage.getItem("user");
@@ -96,9 +97,25 @@ export default function StartPage() {
             return;
         }
 
-        const newUser = { nickname: inputNickname, character, money: 0 };
+        const newUser = {
+            nickname: inputNickname,
+            character,
+            money: 0,
+            buyItem: {
+                clothes: [],
+                head: [],
+                accessories: [],
+            },
+            wearingItem: {
+                clothes: "",
+                head: "",
+                accessories: "",
+            },
+        };
         dispatch(setNickname(inputNickname));
         dispatch(setCoin(characterToCoinMap[character]));
+        dispatch(setBuyItem(newUser.buyItem));
+        dispatch(setWearingItem(newUser.wearingItem));
         saveUsersToStorage([...users, newUser]);
         localStorage.setItem("currentUser", inputNickname);
 
@@ -127,6 +144,8 @@ export default function StartPage() {
         if (user.character) {
             dispatch(setCharacter(user.character));
             dispatch(setCoin(characterToCoinMap[user.character as keyof typeof characterToCoinMap]));
+            dispatch(setBuyItem(user.buyItem));
+            dispatch(setWearingItem(user.wearingItem));
         }
 
         dispatch(setMoney(user.money));

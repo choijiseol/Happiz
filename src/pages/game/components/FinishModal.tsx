@@ -49,7 +49,6 @@ export default function FinishModal({fall, clear, levelCoin, gameFinish, setStar
         }
     }, [clear]);
 
-
     return <ModalBack>
         <Header hasBefore={true}/>
         {gameFinish
