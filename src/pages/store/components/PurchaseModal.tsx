@@ -2,13 +2,13 @@ import styled from "styled-components";
 import Flex from "../../../common/components/Flex.tsx";
 import {useDispatch, useSelector} from "react-redux";
 import type {RootState} from "../../../redux/store.ts";
-import type {WearingItem} from "../../../data/wearingData.ts";
+import type {WearingItemType} from "../../../data/wearingData.ts";
 import {ButtonAnimation} from "../../../common/components/styles/Button.ts";
 import Text from "../../../common/components/Text.tsx";
 import {setBuyItem, setMoney, type User} from "../../../redux/userSlice.ts";
 
 export default function PurchaseModal({selectedItem, store, setOpenPurchase}: {
-    selectedItem: WearingItem | null,
+    selectedItem: WearingItemType | null,
     store: string,
     setOpenPurchase: React.Dispatch<React.SetStateAction<boolean>>
 }) {

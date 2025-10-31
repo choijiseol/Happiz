@@ -1,10 +1,10 @@
-export interface WearingItem {
+export interface WearingItemType {
     type: "wearing";
     name: string;
     price: number;
 }
 
-export type MergedItem = { type: "button" } | WearingItem;
+export type MergedItemType = { type: "button" } | WearingItemType;
 
 export const ClothesData = [
     {name: "shoulder_strap1", price: 50},

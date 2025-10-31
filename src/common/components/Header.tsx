@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Flex from "./Flex.tsx";
 import Text from "./Text.tsx";
-import type {CoinType} from "../../redux/userSlice.ts";
+import type {CoinType, User} from "../../redux/userSlice.ts";
 import {useDispatch, useSelector} from "react-redux";
 import type {RootState} from "../../redux/store.ts";
 import {ButtonAnimation} from "./styles/Button.ts";
@@ -19,17 +19,35 @@ export default function Header({hasCoin, hasSetting, hasBefore, hasSave, isGame,
 }) {
     const navigate = useNavigate();
     const coin = useSelector((state: RootState) => state.user.coin);
+    const wearingItem = useSelector((state: RootState) => state.user.wearingItem);
+    const nickname = useSelector((state: RootState) => state.user.nickname);
 
     const dispatch = useDispatch();
     const onClickBefore = () => {
         if (isGame) dispatch(setColorLevel(1));
-        if(setOpenPurchase) setOpenPurchase(false);
+        if (setOpenPurchase) setOpenPurchase(false);
         else navigate(-1);
     }
 
     const onClickSave = () => {
+        const storedUser = localStorage.getItem("user");
+        if (!storedUser) return;
 
-    }
+        const userData = JSON.parse(storedUser) as Record<string, User>;
+
+        const updatedUserData = Object.entries(userData).reduce((acc, [key, value]) => {
+            if (value.nickname === nickname) {
+                acc[key] = {...value, wearingItem: wearingItem,};
+            } else {
+                acc[key] = value;
+            }
+            return acc;
+        }, {} as Record<string, User>);
+
+        localStorage.setItem("user", JSON.stringify(updatedUserData));
+    };
+
+
 
     return <Wrapper row spaceBetween>
         {hasBefore &&

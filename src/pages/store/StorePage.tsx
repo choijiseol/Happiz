@@ -7,13 +7,13 @@ import {ButtonAnimation} from "../../common/components/styles/Button.ts";
 import {useSelector} from "react-redux";
 import type {RootState} from "../../redux/store.ts";
 import {useNavigate} from "react-router";
-import {AccessoriesData, ClothesData, HeadData, type MergedItem, type WearingItem} from "../../data/wearingData.ts";
+import {AccessoriesData, ClothesData, HeadData, type MergedItemType, type WearingItemType} from "../../data/wearingData.ts";
 import PurchaseModal from "./components/PurchaseModal.tsx";
 
 export default function StorePage() {
     const [store, setStore] = useState<"main" | "clothes" | "head" | "accessories" | "item">("main");
     const [openPurchase, setOpenPurchase] = useState<boolean>(false);
-    const [selectedItem, setSelectedItem] = useState<WearingItem | null>(null);
+    const [selectedItem, setSelectedItem] = useState<WearingItemType | null>(null);
     const coin = useSelector((state: RootState) => state.user.coin);
     const character = useSelector((state: RootState) => state.user.character);
     const navigate = useNavigate();
@@ -34,18 +34,18 @@ export default function StorePage() {
                     : null;
     }, [store]);
 
-    const clothesList: WearingItem[] = List?.map((item) => ({
+    const clothesList: WearingItemType[] = List?.map((item) => ({
         ...item,
         type: "wearing",
     })) ?? [];
 
-    const mergedList: MergedItem[] = [
+    const mergedList: MergedItemType[] = [
         {type: "button"},
         ...clothesList,
     ];
 
     const buyItem = useSelector((state: RootState) => state.user.buyItem);
-    const checkPurchased = (item: WearingItem): boolean => {
+    const checkPurchased = (item: WearingItemType): boolean => {
         if (!buyItem) return false;
         if (store === "clothes") {
             return buyItem.clothes.includes(item.name);

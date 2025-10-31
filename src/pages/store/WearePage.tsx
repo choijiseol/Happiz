@@ -2,14 +2,23 @@ import Flex from "../../common/components/Flex.tsx";
 import styled, {css} from "styled-components";
 import Header from "../../common/components/Header.tsx";
 import {useMemo, useState} from "react";
-import {AccessoriesData, ClothesData, HeadData, type MergedItem, type WearingItem} from "../../data/wearingData.ts";
-import {useSelector} from "react-redux";
+import {
+    AccessoriesData,
+    ClothesData,
+    HeadData,
+    type MergedItemType,
+    type WearingItemType
+} from "../../data/wearingData.ts";
+import {useDispatch, useSelector} from "react-redux";
 import type {RootState} from "../../redux/store.ts";
 import WearingCharacter from "./components/WearingCharacter.tsx";
+import {updateWearingItem} from "../../redux/userSlice.ts";
 
 export default function WearePage() {
     const [currentType, setCurrentType] = useState<"clothes" | "head" | "accessories" | "item">("clothes");
     const buyItem = useSelector((state: RootState) => state.user.buyItem);
+
+    const dispatch = useDispatch();
 
     const List = useMemo(() => {
         return currentType === "clothes"
@@ -21,15 +30,27 @@ export default function WearePage() {
                     : null;
     }, [currentType]);
 
-    const clothesList: WearingItem[] = List?.map((item) => ({
+    const clothesList: WearingItemType[] = List?.map((item) => ({
         ...item,
         type: "wearing",
     })) ?? [];
 
-    const mergedList: MergedItem[] = [
+    const mergedList: MergedItemType[] = [
         {type: "button"},
         ...clothesList,
     ];
+
+    const onClickItemImg = ({currentItem}: {currentItem: string}) => {
+        if(currentType === "clothes") {
+            dispatch(updateWearingItem({clothes: currentItem}));
+        } else if(currentType === "head") {
+            dispatch(updateWearingItem({head: currentItem}));
+        }else if (currentType === "accessories") {
+            dispatch(updateWearingItem({accessories: currentItem}));
+        }else {
+            return;
+        }
+    }
 
     // const onClickChangeType = () => {
     //     setCurrentType();
@@ -69,7 +90,8 @@ export default function WearePage() {
                         buyItem.accessories.includes(item.name);
 
                     if (!isBoughtInAll) return null;
-                    return <Flex width={80} height={80} center style={{backgroundColor: "#ffffff"}}>
+                    return <Flex width={80} height={80} center style={{backgroundColor: "#ffffff"}}
+                                 onClick={() => onClickItemImg({currentItem: item.name})}>
                         <img src={`/assets/img/store/weare/${currentType}/${item.name}.svg`}
                              style={{scale: currentType === "head" ? "0.5" : currentType === "accessories" ? "0.5" : "1"}}/>
                     </Flex>
@@ -105,7 +127,7 @@ const BackBlur = styled(Flex)`
 
 const WeareWrapper = styled(Flex)`
     padding: 20px;
-    z-index: 5;
+    z-index: 4;
 `
 
 const TypeChangeButton = styled(Flex)<{ isLeft?: boolean, isRight?: boolean, selected: boolean }>`

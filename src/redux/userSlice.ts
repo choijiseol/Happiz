@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
+import {createSlice} from "@reduxjs/toolkit";
+import type {PayloadAction} from "@reduxjs/toolkit";
 
 
 export type CharacterType = "fox" | "hedgehog" | "raccoon" | "squirrel";
@@ -76,9 +76,14 @@ const userSlice = createSlice({
         },
         setWearingItem(state, action: PayloadAction<{ clothes: string; head: string; accessories: string; }>) {
             state.wearingItem = action.payload;
+        }, updateWearingItem(state, action: PayloadAction<Partial<{ clothes: string; head: string; accessories: string; }>>) {
+            state.wearingItem = {
+                ...state.wearingItem,
+                ...action.payload,
+            };
         },
     },
 });
 
-export const { setNickname, setCharacter, setCoin, setMoney, setBuyItem, setWearingItem } = userSlice.actions;
+export const {setNickname, setCharacter, setCoin, setMoney, setBuyItem, setWearingItem, updateWearingItem} = userSlice.actions;
 export default userSlice.reducer;
