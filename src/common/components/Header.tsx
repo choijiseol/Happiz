@@ -33,20 +33,16 @@ export default function Header({hasCoin, hasSetting, hasBefore, hasSave, isGame,
         const storedUser = localStorage.getItem("user");
         if (!storedUser) return;
 
-        const userData = JSON.parse(storedUser) as Record<string, User>;
+        const userData = JSON.parse(storedUser) as User[];
 
-        const updatedUserData = Object.entries(userData).reduce((acc, [key, value]) => {
-            if (value.nickname === nickname) {
-                acc[key] = {...value, wearingItem: wearingItem,};
-            } else {
-                acc[key] = value;
-            }
-            return acc;
-        }, {} as Record<string, User>);
+        const updatedUserData = userData.map((u) =>
+            u.nickname === nickname
+                ? { ...u, wearingItem: wearingItem }
+                : u
+        );
 
         localStorage.setItem("user", JSON.stringify(updatedUserData));
     };
-
 
 
     return <Wrapper row spaceBetween>
