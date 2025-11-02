@@ -3,6 +3,7 @@ import styled, {keyframes} from "styled-components";
 import {useSelector} from "react-redux";
 import type {RootState} from "../../../redux/store.ts";
 import {useEffect, useState} from "react";
+import {ClothesData} from "../../../data/wearingData.ts";
 
 export default function WearingCharacter() {
     const character = useSelector((state: RootState) => state.user.character);
@@ -21,9 +22,28 @@ export default function WearingCharacter() {
         return () => clearTimeout(timer);
     }, [wearingItem]);
 
+    const item = ClothesData.find(item => item.name === wearingItem.clothes);
+    const clothesWidth = item ? item.imgWidth : 0;
+    const clothesBottom = item ? (character === "hedgehog" ? item.hedgehogImgBottom : item.imgBottom) : 0;
+    const clothesLeft = character === "fox"
+        ? 3 : character === "hedgehog"
+            ? 23 : character === "raccoon"
+                ? -4 : character === "squirrel"
+                    ? -4 : 0
+
     return <CharacterWrapper verticalBottom horizontalCenter>
         <Flex height={240} width={180} center style={{marginBottom: 200, position: "relative"}}>
             {showGlitter && <GlitterEffect/>}
+            {wearingItem.clothes &&
+                <img src={`/assets/img/store/wear/clothesWearing/${character}_${wearingItem.clothes}.svg`}
+                     style={{
+                         position: "absolute",
+                         zIndex: 1,
+                         width: clothesWidth,
+                         bottom: clothesBottom,
+                         left: clothesLeft
+                     }}/>
+            }
             <img src={`/assets/img/character/${character}1.png`} style={{scale: 0.7}}/>
         </Flex>
     </CharacterWrapper>
@@ -50,7 +70,7 @@ const blink = keyframes`
 
 const GlitterWrapper = styled(Flex)`
     position: absolute;
-    z-index: 1;
+    z-index: 2;
     margin-left: -40px;
     animation: ${blink} 1s ease-in-out;
 `;

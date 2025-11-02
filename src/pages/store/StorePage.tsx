@@ -111,7 +111,7 @@ export default function StorePage() {
                                 </ButtonAnimation>
                                 : item.type !== "button" &&
                                 <Flex center height={"calc(100% - 20px)"}>
-                                    <img src={`/assets/img/store/weare/${store}/${item.name}.svg`}
+                                    <img src={`/assets/img/store/wear/${store}/${item.name}.svg`}
                                          style={{
                                              height: store === "accessories" ? 60 : "auto",
                                              scale: store === "head" ? 0.7 : 1

@@ -17,6 +17,7 @@ import {updateWearingItem} from "../../redux/userSlice.ts";
 export default function WearePage() {
     const [currentType, setCurrentType] = useState<"clothes" | "head" | "accessories" | "item">("clothes");
     const buyItem = useSelector((state: RootState) => state.user.buyItem);
+    const wearingItem = useSelector((state: RootState) => state.user.wearingItem);
 
     const dispatch = useDispatch();
 
@@ -40,14 +41,14 @@ export default function WearePage() {
         ...clothesList,
     ];
 
-    const onClickItemImg = ({currentItem}: {currentItem: string}) => {
-        if(currentType === "clothes") {
+    const onClickItemImg = ({currentItem}: { currentItem: string }) => {
+        if (currentType === "clothes") {
             dispatch(updateWearingItem({clothes: currentItem}));
-        } else if(currentType === "head") {
+        } else if (currentType === "head") {
             dispatch(updateWearingItem({head: currentItem}));
-        }else if (currentType === "accessories") {
+        } else if (currentType === "accessories") {
             dispatch(updateWearingItem({accessories: currentItem}));
-        }else {
+        } else {
             return;
         }
     }
@@ -59,7 +60,7 @@ export default function WearePage() {
         <BackBlur/>
         <Header hasBefore hasSave/>
         <WearingCharacter/>
-        <WeareWrapper height={"100%"} verticalBottom horizontalCenter>
+        <WearWrapper height={"100%"} verticalBottom horizontalCenter>
             <Flex width={320} row flexStart verticalBottom style={{paddingLeft: 15}}>
                 <TypeChangeButton center isLeft selected={currentType === "clothes"}
                                   onClick={() => setCurrentType("clothes")}>
@@ -84,20 +85,37 @@ export default function WearePage() {
             <ItemWrapper width={300} height={80} row verticalCenter>
                 {mergedList.map((item) => {
                     if (item.type === "button") return <></>
+                    const isWearing = currentType === "clothes"
+                        ? wearingItem.clothes.includes(item.name)
+                        : currentType === "head"
+                            ? wearingItem.head.includes(item.name)
+                            : currentType === "accessories"
+                                ? wearingItem.accessories.includes(item.name)
+                                : currentType === "item"
+                                    ? false  //나중에 아이템 하면 조건 추가.
+                                    : false
+                    ;
+
                     const isBoughtInAll =
                         buyItem.clothes.includes(item.name) ||
                         buyItem.head.includes(item.name) ||
                         buyItem.accessories.includes(item.name);
 
                     if (!isBoughtInAll) return null;
-                    return <Flex width={80} height={80} center style={{backgroundColor: "#ffffff"}}
+                    return <Flex width={80} height={80} center
+                                 style={{
+                                     backgroundColor: "#ffffff",
+                                     marginBottom: isWearing ? 6 : 0,
+                                     border: isWearing ? "1px solid #7A7A7A" : "none",
+                                     boxShadow: isWearing ? "0 2px 2px rgba(0, 0, 0, 0.2)" : "none"
+                                 }}
                                  onClick={() => onClickItemImg({currentItem: item.name})}>
-                        <img src={`/assets/img/store/weare/${currentType}/${item.name}.svg`}
+                        <img src={`/assets/img/store/wear/${currentType}/${item.name}.svg`}
                              style={{scale: currentType === "head" ? "0.5" : currentType === "accessories" ? "0.5" : "1"}}/>
                     </Flex>
                 })}
             </ItemWrapper>
-        </WeareWrapper>
+        </WearWrapper>
     </Wrapper>
 }
 
@@ -125,7 +143,7 @@ const BackBlur = styled(Flex)`
     z-index: 1;
 `
 
-const WeareWrapper = styled(Flex)`
+const WearWrapper = styled(Flex)`
     padding: 20px;
     z-index: 4;
 `

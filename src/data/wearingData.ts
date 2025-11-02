@@ -7,8 +7,8 @@ export interface WearingItemType {
 export type MergedItemType = { type: "button" } | WearingItemType;
 
 export const ClothesData = [
-    {name: "shoulder_strap1", price: 50},
-    {name: "shoulder_strap2", price: 50},
+    {name: "shoulder_strap1", price: 50, imgWidth: 134, imgBottom: -2, hedgehogImgBottom: -9},
+    {name: "shoulder_strap2", price: 50, imgWidth: 134, imgBottom: -2, hedgehogImgBottom: -9},
 ];
 
 export const HeadData = [
