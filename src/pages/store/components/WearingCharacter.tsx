@@ -25,11 +25,14 @@ export default function WearingCharacter() {
     const item = ClothesData.find(item => item.name === wearingItem.clothes);
     const clothesWidth = item ? item.imgWidth : 0;
     const clothesBottom = item ? (character === "hedgehog" ? item.hedgehogImgBottom : item.imgBottom) : 0;
-    const clothesLeft = character === "fox"
-        ? 3 : character === "hedgehog"
-            ? 23 : character === "raccoon"
-                ? -4 : character === "squirrel"
-                    ? -4 : 0
+    const clothesLeft = character === "fox" ? 3
+        : character === "hedgehog" ? 23
+            : character === "raccoon" ? -4 :
+                character === "squirrel" ? -4 : 0
+    const headTop = character === "fox" ? -35
+        : character === "hedgehog" ? -25
+            : character === "raccoon" ? -40:
+                character === "squirrel" ? -35 : 0
 
     return <CharacterWrapper verticalBottom horizontalCenter>
         <Flex height={240} width={180} center style={{marginBottom: 200, position: "relative"}}>
@@ -42,6 +45,27 @@ export default function WearingCharacter() {
                          width: clothesWidth,
                          bottom: clothesBottom,
                          left: clothesLeft
+                     }}/>
+            }
+            {wearingItem.accessories &&
+                <img src={`/assets/img/store/wear/accessories/${wearingItem.accessories}.svg`}
+                     style={{
+                         position: "absolute",
+                         zIndex: 2,
+                         width: 50,
+                         transform: "rotate(35deg)",
+                         top: 120,
+                         left: clothesLeft + 40
+                     }}/>
+            }
+            {wearingItem.head &&
+                <img src={`/assets/img/store/wear/head/${wearingItem.head}.svg`}
+                     style={{
+                         position: "absolute",
+                         width: 180,
+                         zIndex: 2,
+                         top: headTop,
+                         left: clothesLeft - 20
                      }}/>
             }
             <img src={`/assets/img/character/${character}1.png`} style={{scale: 0.7}}/>
