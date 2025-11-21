@@ -104,12 +104,15 @@ export default function WearePage() {
                     if (!isBoughtInAll) return null;
                     return <Flex width={80} height={80} center
                                  style={{
+                                     position: "relative",
                                      backgroundColor: "#ffffff",
                                      marginBottom: isWearing ? 6 : 0,
                                      border: isWearing ? "1px solid #7A7A7A" : "none",
                                      boxShadow: isWearing ? "0 2px 2px rgba(0, 0, 0, 0.2)" : "none"
                                  }}
                                  onClick={() => onClickItemImg({currentItem: item.name})}>
+                        <img src={`/assets/img/store/itemIcon/${item?.theme}.svg`}
+                             style={{position: "absolute", width: 20, left: 4, bottom: 4, zIndex: 1}}/>
                         <img src={`/assets/img/store/wear/${currentType}/${item.name}.svg`}
                              style={{scale: currentType === "head" ? "0.5" : currentType === "accessories" ? "0.5" : "1"}}/>
                     </Flex>

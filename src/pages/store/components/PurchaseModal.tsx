@@ -61,6 +61,8 @@ export default function PurchaseModal({selectedItem, store, setOpenPurchase}: {
     }
 
     return <Wrapper center gap={20}>
+        <img src={`/assets/img/store/itemIcon/${selectedItem?.theme}.svg`}
+             style={{width: 40, zIndex: 1, marginTop: -40}}/>
         <ItemWrapper>
             <Flex center width={"100%"} height={"calc(100% - 30px)"}>
                 <img src={`/assets/img/store/wear/${store}/${selectedItem?.name}.svg`}

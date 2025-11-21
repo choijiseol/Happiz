@@ -7,7 +7,13 @@ import {ButtonAnimation} from "../../common/components/styles/Button.ts";
 import {useSelector} from "react-redux";
 import type {RootState} from "../../redux/store.ts";
 import {useNavigate} from "react-router";
-import {AccessoriesData, ClothesData, HeadData, type MergedItemType, type WearingItemType} from "../../data/wearingData.ts";
+import {
+    AccessoriesData,
+    ClothesData,
+    HeadData,
+    type MergedItemType,
+    type WearingItemType
+} from "../../data/wearingData.ts";
 import PurchaseModal from "./components/PurchaseModal.tsx";
 
 export default function StorePage() {
@@ -86,7 +92,7 @@ export default function StorePage() {
                                 </ButtonAnimation>
                             </Flex>
                             <Flex row gap={20}>
-                            <ButtonAnimation onClick={() => setStore("accessories")}>
+                                <ButtonAnimation onClick={() => setStore("accessories")}>
                                     <img src={"/assets/img/store/accessories_paper.svg"} alt={"액세서리"}/>
                                 </ButtonAnimation>
                                 <ButtonAnimation onClick={() => setStore("item")}>
@@ -99,22 +105,25 @@ export default function StorePage() {
                             item.type !== "button" ? checkPurchased(item) : false;
 
                         return <StoreItemWrapper isFirstIdx={idx === 0} purchaseCompleted={purchaseCompleted}
-                        onClick={() => {
-                            if(!purchaseCompleted && item.type !== "button"){
-                                setOpenPurchase(true)
-                                setSelectedItem(item);
-                            }
-                        }}>
+                                                 onClick={() => {
+                                                     if (!purchaseCompleted && item.type !== "button") {
+                                                         setOpenPurchase(true)
+                                                         setSelectedItem(item);
+                                                     }
+                                                 }}>
                             {idx === 0 ? <ButtonAnimation onClick={() => setStore("main")}>
                                     <img src={"/assets/img/store/store_signboard.svg"}
                                          style={{position: "absolute", left: -20, top: 15}}/>
                                 </ButtonAnimation>
                                 : item.type !== "button" &&
-                                <Flex center height={"calc(100% - 20px)"}>
+                                <Flex center height={"100%"} style={{position: "relative"}}>
+                                    <img src={`/assets/img/store/itemIcon/${item.theme}.svg`}
+                                         style={{position: "absolute", width: 20, left: 4, top: 4}}/>
                                     <img src={`/assets/img/store/wear/${store}/${item.name}.svg`}
                                          style={{
                                              height: store === "accessories" ? 60 : "auto",
-                                             scale: store === "head" ? 0.7 : 1
+                                             scale: store === "head" ? 0.7 : 1,
+                                             marginBottom: 10,
                                          }}/>
                                     <Flex width={"100%"} height={20} row gap={4} center
                                           style={{position: "absolute", backgroundColor: "#FFFFFF", bottom: 0}}>
