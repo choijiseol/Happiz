@@ -8,8 +8,11 @@ export interface WearingItemType {
 export type MergedItemType = { type: "button" } | WearingItemType;
 
 export const ClothesData = [
-    {name: "shoulder_strap1", price: 50, imgWidth: 134, imgBottom: -2, hedgehogImgBottom: -9, theme: "countryside"},
-    {name: "shoulder_strap2", price: 50, imgWidth: 134, imgBottom: -2, hedgehogImgBottom: -9, theme: "countryside"},
+    {name: "shoulder_strap1", price: 50, theme: "countryside"},
+    {name: "shoulder_strap2", price: 50, theme: "countryside"},
+    {name: "swimsuit1", price: 25, theme: "ocean"},
+    {name: "swimsuit2", price: 25, theme: "ocean"},
+    {name: "swimsuit_pants", price: 20, theme: "ocean"},
 ];
 
 export const HeadData = [
@@ -21,6 +24,9 @@ export const AccessoriesData = [
     {name: "radish", price: 15, theme: "countryside"},
     {name: "shovel", price: 20, theme: "countryside"},
     {name: "watering_can", price: 25, theme: "countryside"},
+    {name: "water_gun", price: 25, theme: "ocean"},
+    {name: "tube1", price: 20, theme: "ocean"},
+    {name: "tube2", price: 20, theme: "ocean"},
 ];
 
 export const wearingData = {

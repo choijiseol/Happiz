@@ -324,7 +324,7 @@ const Character = styled(Flex)<{ character: string }>`
     width: 160px;
     height: 240px;
     background-image: ${({character}) =>
-            `url('/assets/img/character/${character}1.png')`};
+            `url('/assets/img/character/${character}1.svg')`};
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center bottom;

@@ -104,6 +104,7 @@ export default function WearePage() {
                     if (!isBoughtInAll) return null;
                     return <Flex width={80} height={80} center
                                  style={{
+                                     flexShrink: 0,
                                      position: "relative",
                                      backgroundColor: "#ffffff",
                                      marginBottom: isWearing ? 6 : 0,
@@ -178,7 +179,8 @@ const Line = styled.div`
 const ItemWrapper = styled(Flex)`
     background-color: rgba(255, 255, 255, 0.7);
     border-radius: 10px;
-    overflow: hidden;
+    overflow-x: scroll;
+    overflow-y: hidden;
     padding: 10px;
     gap: 10px;
 `

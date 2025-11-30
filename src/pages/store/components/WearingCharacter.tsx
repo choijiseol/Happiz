@@ -3,7 +3,6 @@ import styled, {keyframes} from "styled-components";
 import {useSelector} from "react-redux";
 import type {RootState} from "../../../redux/store.ts";
 import {useEffect, useState} from "react";
-import {ClothesData} from "../../../data/wearingData.ts";
 
 export default function WearingCharacter() {
     const character = useSelector((state: RootState) => state.user.character);
@@ -22,27 +21,29 @@ export default function WearingCharacter() {
         return () => clearTimeout(timer);
     }, [wearingItem]);
 
-    const item = ClothesData.find(item => item.name === wearingItem.clothes);
-    const clothesWidth = item ? item.imgWidth : 0;
-    const clothesBottom = item ? (character === "hedgehog" ? item.hedgehogImgBottom : item.imgBottom) : 0;
-    const clothesLeft = character === "fox" ? 3
-        : character === "hedgehog" ? 23
-            : character === "raccoon" ? -4 :
-                character === "squirrel" ? -4 : 0
+    const clothesLeft = character === "fox" ? 21
+        : character === "hedgehog" ? 42
+            : character === "raccoon" ? 14 :
+                character === "squirrel" ? 13 : 0;
+    const clothesBottom = character === "fox" ? 1
+        : character === "hedgehog" ? -3
+            : character === "raccoon" ? 4 :
+                character === "squirrel" ? 3 : 0;
     const headTop = character === "fox" ? -35
         : character === "hedgehog" ? -25
             : character === "raccoon" ? -40:
-                character === "squirrel" ? -35 : 0
+                character === "squirrel" ? -35 : 0;
 
     return <CharacterWrapper verticalBottom horizontalCenter>
-        <Flex height={240} width={180} center style={{marginBottom: 200, position: "relative"}}>
+        <Flex height={240} width={180} center
+              style={{marginBottom: 230, position: "relative", marginLeft: character !== "hedgehog" ? 50: 0}}>
             {showGlitter && <GlitterEffect/>}
             {wearingItem.clothes &&
                 <img src={`/assets/img/store/wear/clothesWearing/${character}_${wearingItem.clothes}.svg`}
                      style={{
                          position: "absolute",
                          zIndex: 1,
-                         width: clothesWidth,
+                         scale: 1.5,
                          bottom: clothesBottom,
                          left: clothesLeft
                      }}/>
@@ -55,20 +56,20 @@ export default function WearingCharacter() {
                          width: 50,
                          transform: "rotate(35deg)",
                          top: 120,
-                         left: clothesLeft + 40
+                         left: clothesLeft + 20
                      }}/>
             }
             {wearingItem.head &&
                 <img src={`/assets/img/store/wear/head/${wearingItem.head}.svg`}
                      style={{
                          position: "absolute",
-                         width: 180,
+                         scale: 1.5,
                          zIndex: 2,
                          top: headTop,
-                         left: clothesLeft - 20
+                         left: clothesLeft - 14
                      }}/>
             }
-            <img src={`/assets/img/character/${character}1.png`} style={{scale: 0.7}}/>
+            <img src={`/assets/img/character/${character}1.svg`} style={{scale: 1.5}}/>
         </Flex>
     </CharacterWrapper>
 }

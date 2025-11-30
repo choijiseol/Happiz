@@ -67,6 +67,7 @@ export default function PurchaseModal({selectedItem, store, setOpenPurchase}: {
             <Flex center width={"100%"} height={"calc(100% - 30px)"}>
                 <img src={`/assets/img/store/wear/${store}/${selectedItem?.name}.svg`}
                      style={{
+                         maxWidth: 150,
                          height: store === "accessories" ? 100 : "auto",
                          scale: store === "clothes" ? 1.5 : 1
                      }}/>

@@ -70,7 +70,7 @@ export default function StorePage() {
             <Flex width={"100%"} style={{position: "relative"}} onClick={() => navigate('/store/weare')}>
                 <img src={"/assets/img/store/speech-bubble.svg"} width={132}
                      style={{position: "absolute", bottom: 20, right: 155}}/>
-                <img src={`/assets/img/character/${character}1.png`} height={203}
+                <img src={`/assets/img/character/${character}1.svg`} height={203}
                      style={{position: "absolute", bottom: -60, right: 10}}/>
             </Flex>
         </GoDressWrapper>
@@ -122,6 +122,7 @@ export default function StorePage() {
                                     <img src={`/assets/img/store/wear/${store}/${item.name}.svg`}
                                          style={{
                                              height: store === "accessories" ? 60 : "auto",
+                                             maxWidth: 90,
                                              scale: store === "head" ? 0.7 : 1,
                                              marginBottom: 10,
                                          }}/>
