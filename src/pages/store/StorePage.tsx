@@ -121,7 +121,7 @@ export default function StorePage() {
                                          style={{position: "absolute", width: 20, left: 4, top: 4}}/>
                                     <img src={`/assets/img/store/wear/${store}/${item.name}.svg`}
                                          style={{
-                                             height: store === "accessories" ? 60 : "auto",
+                                             height: store === "accessories" ? 75 : "auto",
                                              maxWidth: 90,
                                              scale: store === "head" ? 0.7 : 1,
                                              marginBottom: 10,

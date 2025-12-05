@@ -49,14 +49,13 @@ export default function WearingCharacter() {
                      }}/>
             }
             {wearingItem.accessories &&
-                <img src={`/assets/img/store/wear/accessories/${wearingItem.accessories}.svg`}
+                <img src={`/assets/img/store/wear/accessoriesWearing/${wearingItem.accessories}.svg`}
                      style={{
                          position: "absolute",
                          zIndex: 2,
-                         width: 50,
-                         transform: "rotate(35deg)",
-                         top: 120,
-                         left: clothesLeft + 20
+                         width: 290,
+                         top: headTop,
+                         left: clothesLeft - 97
                      }}/>
             }
             {wearingItem.head &&

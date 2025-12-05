@@ -115,7 +115,7 @@ export default function WearePage() {
                         <img src={`/assets/img/store/itemIcon/${item?.theme}.svg`}
                              style={{position: "absolute", width: 20, left: 4, bottom: 4, zIndex: 1}}/>
                         <img src={`/assets/img/store/wear/${currentType}/${item.name}.svg`}
-                             style={{scale: currentType === "head" ? "0.5" : currentType === "accessories" ? "0.5" : "1"}}/>
+                             style={{scale: currentType === "head" ? "0.5" : currentType === "accessories" ? "0.7" : "1"}}/>
                     </Flex>
                 })}
             </ItemWrapper>
