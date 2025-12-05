@@ -41,13 +41,16 @@ export default function WearePage() {
         ...clothesList,
     ];
 
-    const onClickItemImg = ({currentItem}: { currentItem: string }) => {
+    const onClickItemImg = ({currentItem, isWearing}: { currentItem: string, isWearing: boolean }) => {
         if (currentType === "clothes") {
-            dispatch(updateWearingItem({clothes: currentItem}));
+            if (isWearing) dispatch(updateWearingItem({clothes: ""}));
+            else dispatch(updateWearingItem({clothes: currentItem}));
         } else if (currentType === "head") {
-            dispatch(updateWearingItem({head: currentItem}));
+            if (isWearing) dispatch(updateWearingItem({head: ""}));
+            else dispatch(updateWearingItem({head: currentItem}));
         } else if (currentType === "accessories") {
-            dispatch(updateWearingItem({accessories: currentItem}));
+            if (isWearing) dispatch(updateWearingItem({accessories: ""}));
+            else dispatch(updateWearingItem({accessories: currentItem}));
         } else {
             return;
         }
@@ -111,7 +114,7 @@ export default function WearePage() {
                                      border: isWearing ? "1px solid #7A7A7A" : "none",
                                      boxShadow: isWearing ? "0 2px 2px rgba(0, 0, 0, 0.2)" : "none"
                                  }}
-                                 onClick={() => onClickItemImg({currentItem: item.name})}>
+                                 onClick={() => onClickItemImg({currentItem: item.name, isWearing: isWearing})}>
                         <img src={`/assets/img/store/itemIcon/${item?.theme}.svg`}
                              style={{position: "absolute", width: 20, left: 4, bottom: 4, zIndex: 1}}/>
                         <img src={`/assets/img/store/wear/${currentType}/${item.name}.svg`}
