@@ -54,7 +54,10 @@ export default function FinishModal({fall, clear, levelCoin, gameFinish, setStar
         {gameFinish
             ? <Flex height={"100%"} center gap={60}>
                 <BoldText>완벽 CLEAR!!!</BoldText>
-                <Flex onClick={() => navigate(-1)}>
+                <Flex onClick={() => {
+                    dispatch(setColorLevel(1))
+                    navigate(-1);
+                }}>
                     <RoundButton text={"홈으로"}/>
                 </Flex>
             </Flex>
