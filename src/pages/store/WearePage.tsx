@@ -7,29 +7,35 @@ import {
     ClothesData,
     HeadData,
     type MergedItemType,
-    type WearingItemType
+    type WearingItemType, type WearingTheme
 } from "../../data/wearingData.ts";
 import {useDispatch, useSelector} from "react-redux";
 import type {RootState} from "../../redux/store.ts";
 import WearingCharacter from "./components/WearingCharacter.tsx";
 import {updateWearingItem} from "../../redux/userSlice.ts";
+import {ButtonAnimation} from "../../common/components/styles/Button.ts";
 
 export default function WearePage() {
-    const [currentType, setCurrentType] = useState<"clothes" | "head" | "accessories" | "item">("clothes");
+    const [currentItem, setCurrentItem] = useState<"clothes" | "head" | "accessories" | "item">("clothes");
+    const [currentTheme, setCurrentTheme] = useState<WearingTheme>("all");
+    const [isThemeOpen, setIsThemeOpen] = useState<boolean>(false);
+
     const buyItem = useSelector((state: RootState) => state.user.buyItem);
     const wearingItem = useSelector((state: RootState) => state.user.wearingItem);
 
     const dispatch = useDispatch();
 
+    const themeList: WearingTheme[] = ["all", "countryside", "ocean", "winter", "hip", "fairy", "job", "lopan", "animal", "halloween"];
+
     const List = useMemo(() => {
-        return currentType === "clothes"
+        return currentItem === "clothes"
             ? ClothesData
-            : currentType === "head"
+            : currentItem === "head"
                 ? HeadData
-                : currentType === "accessories"
+                : currentItem === "accessories"
                     ? AccessoriesData
                     : null;
-    }, [currentType]);
+    }, [currentItem]);
 
     const clothesList: WearingItemType[] = List?.map((item) => ({
         ...item,
@@ -42,13 +48,13 @@ export default function WearePage() {
     ];
 
     const onClickItemImg = ({currentItem, isWearing}: { currentItem: string, isWearing: boolean }) => {
-        if (currentType === "clothes") {
+        if (currentItem === "clothes") {
             if (isWearing) dispatch(updateWearingItem({clothes: ""}));
             else dispatch(updateWearingItem({clothes: currentItem}));
-        } else if (currentType === "head") {
+        } else if (currentItem === "head") {
             if (isWearing) dispatch(updateWearingItem({head: ""}));
             else dispatch(updateWearingItem({head: currentItem}));
-        } else if (currentType === "accessories") {
+        } else if (currentItem === "accessories") {
             if (isWearing) dispatch(updateWearingItem({accessories: ""}));
             else dispatch(updateWearingItem({accessories: currentItem}));
         } else {
@@ -56,48 +62,76 @@ export default function WearePage() {
         }
     }
 
-    // const onClickChangeType = () => {
-    //     setCurrentType();
-    // }
     return <Wrapper>
         <BackBlur/>
         <Header hasBefore hasSave/>
         <WearingCharacter/>
         <WearWrapper height={"100%"} verticalBottom horizontalCenter>
-            <Flex width={320} row flexStart verticalBottom style={{paddingLeft: 15}}>
-                <TypeChangeButton center isLeft selected={currentType === "clothes"}
-                                  onClick={() => setCurrentType("clothes")}>
-                    <img src={"/assets/img/store/clothes_icon.svg"} alt={"옷"}/>
-                </TypeChangeButton>
-                <Line/>
-                <TypeChangeButton center selected={currentType === "head"}
-                                  onClick={() => setCurrentType("head")}>
-                    <img src={"/assets/img/store/head_icon.svg"} alt={"머리 장식"}/>
-                </TypeChangeButton>
-                <Line/>
-                <TypeChangeButton center selected={currentType === "accessories"}
-                                  onClick={() => setCurrentType("accessories")}>
-                    <img src={"/assets/img/store/accessories_icon.svg"} alt={"액세서리"}/>
-                </TypeChangeButton>
-                <Line/>
-                <TypeChangeButton center isRight selected={currentType === "item"}
-                                  onClick={() => setCurrentType("item")}>
-                    <img src={"/assets/img/store/item_icon.svg"} alt={"아이템"}/>
-                </TypeChangeButton>
+            <Flex width={"100%"} row spaceBetween center>
+                <Flex width={320} row flexStart verticalBottom style={{paddingLeft: 15}}>
+                    <TypeChangeButton center isLeft selected={currentItem === "clothes"}
+                                      onClick={() => setCurrentItem("clothes")}>
+                        <img src={"/assets/img/store/clothes_icon.svg"} alt={"옷"}/>
+                    </TypeChangeButton>
+                    <Line/>
+                    <TypeChangeButton center selected={currentItem === "head"}
+                                      onClick={() => setCurrentItem("head")}>
+                        <img src={"/assets/img/store/head_icon.svg"} alt={"머리 장식"}/>
+                    </TypeChangeButton>
+                    <Line/>
+                    <TypeChangeButton center selected={currentItem === "accessories"}
+                                      onClick={() => setCurrentItem("accessories")}>
+                        <img src={"/assets/img/store/accessories_icon.svg"} alt={"액세서리"}/>
+                    </TypeChangeButton>
+                    <Line/>
+                    <TypeChangeButton center isRight selected={currentItem === "item"}
+                                      onClick={() => setCurrentItem("item")}>
+                        <img src={"/assets/img/store/item_icon.svg"} alt={"아이템"}/>
+                    </TypeChangeButton>
+                </Flex>
+                <ThemeFilterWrapper isThemeOpen={isThemeOpen}>
+                    <ThemePopup center isOpen={isThemeOpen}>
+                        {themeList.map((theme, index) =>
+                            <Flex center gap={3} width={"100%"} key={theme}
+                                  onClick={() => {
+                                      setCurrentTheme(theme);
+                                      setIsThemeOpen(false);
+                                  }}
+                            >
+                                {index !== 0 && <Flex width={"100%"} height={1} style={{backgroundColor: "#F0F0F0"}}/>}
+                                <Flex center style={{position: "relative"}}>
+                                    <ButtonAnimation center>
+                                        {currentTheme === theme && <CurrentThemeCircle/>}
+                                        <img src={`/assets/img/store/itemIcon/${theme}.svg`} alt={theme}
+                                             style={{width: 24, height: 24}}/>
+                                    </ButtonAnimation>
+                                </Flex>
+                            </Flex>
+                        )}
+                    </ThemePopup>
+                    <ThemeToggleButton center selected={isThemeOpen} isThemeOpen={isThemeOpen}
+                                       onClick={() => setIsThemeOpen(!isThemeOpen)}>
+                        <img src={`/assets/img/store/itemIcon/${currentTheme}.svg`} alt={currentTheme}
+                             style={{width: 24, height: 24}}/>
+                    </ThemeToggleButton>
+                </ThemeFilterWrapper>
             </Flex>
             <ItemWrapper width={300} height={80} row verticalCenter>
                 {mergedList.map((item) => {
                     if (item.type === "button") return <></>
-                    const isWearing = currentType === "clothes"
+                    const isWearing = currentItem === "clothes"
                         ? wearingItem.clothes.includes(item.name)
-                        : currentType === "head"
+                        : currentItem === "head"
                             ? wearingItem.head.includes(item.name)
-                            : currentType === "accessories"
+                            : currentItem === "accessories"
                                 ? wearingItem.accessories.includes(item.name)
-                                : currentType === "item"
+                                : currentItem === "item"
                                     ? false  //나중에 아이템 하면 조건 추가.
                                     : false
                     ;
+
+                    const matchTheme = currentTheme === "all" || item.theme === currentTheme;
+                    if (!matchTheme) return null;
 
                     const isBoughtInAll =
                         buyItem.clothes.includes(item.name) ||
@@ -117,8 +151,8 @@ export default function WearePage() {
                                  onClick={() => onClickItemImg({currentItem: item.name, isWearing: isWearing})}>
                         <img src={`/assets/img/store/itemIcon/${item?.theme}.svg`}
                              style={{position: "absolute", width: 20, left: 4, bottom: 4, zIndex: 1}}/>
-                        <img src={`/assets/img/store/wear/${currentType}/${item.name}.svg`}
-                             style={{scale: currentType === "head" ? "0.5" : currentType === "accessories" ? "0.7" : "1"}}/>
+                        <img src={`/assets/img/store/wear/${currentItem}/${item.name}.svg`}
+                             style={{scale: currentItem === "head" ? "0.5" : currentItem === "accessories" ? "0.7" : "1"}}/>
                     </Flex>
                 })}
             </ItemWrapper>
@@ -186,4 +220,62 @@ const ItemWrapper = styled(Flex)`
     overflow-y: hidden;
     padding: 10px;
     gap: 10px;
+`
+
+const ThemeToggleButton = styled(Flex)<{ selected: boolean, isThemeOpen: boolean }>`
+    z-index: 15;
+    width: 50px;
+    height: 30px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    transition: transform 0.2s ease-in-out;
+    cursor: pointer;
+    
+    &:hover {
+        ${({isThemeOpen}) => !isThemeOpen && css`
+            transform: scale(1.1);
+        `}
+    }
+`
+
+const ThemeFilterWrapper = styled(Flex)<{isThemeOpen: boolean}>`
+    position: relative;
+    ${({isThemeOpen}) => isThemeOpen && css`
+        background-color: #ffffff;
+        border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 15px;
+    `};
+`;
+
+const ThemePopup = styled(Flex)<{isOpen: boolean}>`
+    width: 44px;
+    bottom: 30px;
+    padding: 3px 3px 10px 3px;
+    position: absolute;
+    background-color: #ffffff;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    gap: 3px;
+    z-index: 10;
+    overflow-y: auto;
+    transform: translateY(12px);
+    
+    opacity: 0.7;
+    visibility: hidden;
+    transition: transform 200ms ease, opacity 200ms ease, visibility 200ms ease;
+
+    ${({isOpen}) => isOpen && css`
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+    `}
+`
+
+const CurrentThemeCircle = styled(ButtonAnimation)`
+    z-index: 20;
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 3px solid #2F80ED;
 `

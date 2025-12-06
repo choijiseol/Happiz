@@ -6,6 +6,7 @@ export interface WearingItemType {
 }
 
 export type MergedItemType = { type: "button" } | WearingItemType;
+export type WearingTheme = "all" | "countryside" | "ocean" | "winter" | "hip" | "fairy" | "job" | "lopan" | "animal" | "halloween";
 
 export const ClothesData = [
     {name: "shoulder_strap1", price: 50, theme: "countryside"},
