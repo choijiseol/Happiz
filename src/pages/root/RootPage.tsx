@@ -9,5 +9,5 @@ export default function RootPage() {
         navigate('/start');
     }, []);
 
-    return <>잠시만 기다려주세요.</>
+    return <>잠시만 기다려주세요...</>
 }
