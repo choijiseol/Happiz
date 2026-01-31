@@ -3,10 +3,12 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 
 interface GameState {
     colorLevel: number;
+    pictureLevel: number;
 }
 
 const initialState: GameState = {
-    colorLevel: 1
+    colorLevel: 1,
+    pictureLevel: 1,
 };
 
 const gameSlice = createSlice({
@@ -16,8 +18,11 @@ const gameSlice = createSlice({
         setColorLevel(state, action: PayloadAction<number>) {
             state.colorLevel = action.payload;
         },
+        setPictureLevel(state, action: PayloadAction<number>) {
+            state.pictureLevel = action.payload;
+        },
     },
 });
 
-export const { setColorLevel } = gameSlice.actions;
+export const { setColorLevel, setPictureLevel } = gameSlice.actions;
 export default gameSlice.reducer;

@@ -106,8 +106,8 @@ export default function ColorGamePage() {
         <GamePlayWrapper gap={10} center level={levelData.level}>
             {gridColors.map((color, i) => (
                 <ColorBlock key={i} center color={color} level={levelData.level} onClick={() => handleClick(i)}>
-                    {foundDiffs.includes(i) && <img src={"/assets/img/icon/correct.svg"} width={50} alt={"정답"}/>}
-                    {wrongIndex === i && <img src={"/assets/img/icon/fall.svg"} width={50} alt={"오답"}/>}
+                    {foundDiffs.includes(i) && <img src={"/assets/img/icon/correct_color.svg"} width={50} alt={"정답"}/>}
+                    {wrongIndex === i && <img src={"/assets/img/icon/fall_color.svg"} width={50} alt={"오답"}/>}
                 </ColorBlock>
             ))}
         </GamePlayWrapper>

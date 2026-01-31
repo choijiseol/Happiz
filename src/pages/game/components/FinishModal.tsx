@@ -9,18 +9,20 @@ import * as React from "react";
 import Text from "../../../common/components/Text.tsx";
 import {useEffect} from "react";
 import {setMoney} from "../../../redux/userSlice.ts";
-import {setColorLevel} from "../../../redux/gameSlice.ts";
+import {setColorLevel, setPictureLevel} from "../../../redux/gameSlice.ts";
 import {useNavigate} from "react-router";
 
-export default function FinishModal({fall, clear, levelCoin, gameFinish, setStart, setIsClear}: {
+export default function FinishModal({fall, clear, levelCoin, gameFinish, setStart, setIsClear, gameType = "color"}: {
     fall: boolean,
     clear: boolean,
     levelCoin: number,
     gameFinish: boolean,
     setStart: React.Dispatch<React.SetStateAction<boolean>>,
-    setIsClear: React.Dispatch<React.SetStateAction<"CLEAR" | "PLAY" | "FALL">>
+    setIsClear: React.Dispatch<React.SetStateAction<"CLEAR" | "PLAY" | "FALL">>,
+    gameType?: "color" | "picture",
 }) {
     const colorLevel = useSelector((state: RootState) => state.game.colorLevel);
+    const pictureLevel = useSelector((state: RootState) => state.game.pictureLevel);
     const coin = useSelector((state: RootState) => state.user.coin);
     const money = useSelector((state: RootState) => state.user.money);
     const nickname = useSelector((state: RootState) => state.user.nickname);
@@ -28,7 +30,10 @@ export default function FinishModal({fall, clear, levelCoin, gameFinish, setStar
     const navigate = useNavigate();
 
     const onClickNextButton = () => {
-        if (clear) dispatch(setColorLevel(colorLevel + 1));
+        if (clear) {
+            if (gameType === "picture") dispatch(setPictureLevel(pictureLevel + 1));
+            else dispatch(setColorLevel(colorLevel + 1));
+        }
         setStart(true);
         setIsClear("PLAY");
     }
@@ -55,7 +60,8 @@ export default function FinishModal({fall, clear, levelCoin, gameFinish, setStar
             ? <Flex height={"100%"} center gap={60}>
                 <BoldText>완벽 CLEAR!!!</BoldText>
                 <Flex onClick={() => {
-                    dispatch(setColorLevel(1))
+                    if (gameType === "picture") dispatch(setPictureLevel(1));
+                    else dispatch(setColorLevel(1));
                     navigate(-1);
                 }}>
                     <RoundButton text={"홈으로"}/>
@@ -69,7 +75,7 @@ export default function FinishModal({fall, clear, levelCoin, gameFinish, setStar
                 </Flex>
                 : clear ? <Flex height={"100%"} gap={60} center>
                         <Flex gap={10} center>
-                            <BoldText>{colorLevel}단계 CLEAR!!</BoldText>
+                            <BoldText>{(gameType === "picture" ? pictureLevel : colorLevel)}단계 CLEAR!!</BoldText>
                             <CoinWrapper gap={5} row center>
                                 <img src={`/assets/img/coin/${coin}.svg`} alt="coin" height={38}/>
                                 <Text fontSize={28} fontWeight={700} color={"#00496F"}>+{levelCoin}</Text>
