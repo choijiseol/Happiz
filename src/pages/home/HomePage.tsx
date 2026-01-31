@@ -13,6 +13,7 @@ export default function HomePage(){
     const [openSetting, setOpenSetting] = useState<boolean>(false);
     const character = useSelector((state: RootState) => state.user.character);
     const navigate = useNavigate();
+    const wearingItem = useSelector((state: RootState) => state.user.wearingItem);
 
     return <Wrapper>
         <Header hasCoin hasSetting setOpenSetting={setOpenSetting}/>
@@ -20,7 +21,7 @@ export default function HomePage(){
         <Flex height={"100%"} center gap={30}>
             <ButtonAnimation center onClick={() => navigate("/store")}>
                 <Text fontSize={24} fontWeight={700} color={"#00496F"} style={{position: "absolute", paddingTop: 74}}>상점</Text>
-                <img src={`/assets/img/character/${character}_cloud.svg`}/>
+                <img src={`/assets/img/character/cloud/${character}_cloud${wearingItem.head ? `_${wearingItem.head}` : ""}.svg`}/>
             </ButtonAnimation>
             <ButtonAnimation center onClick={() => navigate("/list")}>
                 <Text fontSize={24} fontWeight={700} color={"#00496F"} style={{position: "absolute"}}>시작</Text>

@@ -17,7 +17,9 @@ export const ClothesData = [
 ];
 
 export const HeadData = [
-    {name: "straw_hat", price: 30, theme: "countryside"}
+    {name: "straw_hat", price: 30, theme: "countryside"},
+    {name: "bandana_hat1", price: 40, theme: "countryside"},
+    {name: "bandana_hat2", price: 40, theme: "countryside"}
 ];
 
 export const AccessoriesData = [
