@@ -22,6 +22,7 @@ export default function StorePage() {
     const [selectedItem, setSelectedItem] = useState<WearingItemType | null>(null);
     const coin = useSelector((state: RootState) => state.user.coin);
     const character = useSelector((state: RootState) => state.user.character);
+    const wearingItem = useSelector((state: RootState) => state.user.wearingItem);
     const navigate = useNavigate();
 
     const signboardText = store === "main" ? "상점"
@@ -63,6 +64,26 @@ export default function StorePage() {
         return false;
     };
 
+    const headRight = character === "fox" ? 21
+        : character === "hedgehog" ? 5
+            : character === "raccoon" ? 30
+                : character === "squirrel" ? 33 : 30;
+
+    const headBottom = character === "fox" ? 18
+        : character === "hedgehog" ? 10
+            : character === "raccoon" ? 20
+                : character === "squirrel" ? 18 : 18;
+
+    const clothesRight = character === "fox" ? 47
+        : character === "hedgehog" ? 34
+            : character === "raccoon" ? 56
+                : character === "squirrel" ? 59 : 59;
+
+    const clothesBottom = character === "fox" ? -48
+        : character === "hedgehog" ? -52
+            : character === "raccoon" ? -46
+                : character === "squirrel" ? -48 : -48;
+
     return <Wrapper>
         <BackBlur/>
         <Header hasBefore hasCoin setOpenPurchase={(store === "main" || !openPurchase) ? null : setOpenPurchase}/>
@@ -72,6 +93,14 @@ export default function StorePage() {
                      style={{position: "absolute", bottom: 20, right: 155}}/>
                 <img src={`/assets/img/character/${character}1.svg`} height={203}
                      style={{position: "absolute", bottom: -60, right: 10}}/>
+                {wearingItem.head &&
+                    <img src={`/assets/img/store/wear/headWearing/${wearingItem.head}.svg`}
+                         style={{position: "absolute", bottom: headBottom, right: headRight, width: 140, zIndex: 2}}/>
+                }
+                {wearingItem.clothes &&
+                    <img src={`/assets/img/store/wear/clothesWearing/${character}_${wearingItem.clothes}.svg`}
+                         style={{position: "absolute", bottom: clothesBottom, right: clothesRight, width: 87, zIndex: 1}}/>
+                }
             </Flex>
         </GoDressWrapper>
         <Flex center height={"100%"}>
