@@ -16,7 +16,7 @@ import {updateWearingItem} from "../../redux/userSlice.ts";
 import {ButtonAnimation} from "../../common/components/styles/Button.ts";
 
 export default function WearePage() {
-    const [currentItem, setCurrentItem] = useState<"clothes" | "head" | "accessories" | "item">("clothes");
+    const [currentType, setCurrentType] = useState<"clothes" | "head" | "accessories" | "item">("clothes");
     const [currentTheme, setCurrentTheme] = useState<WearingTheme>("all");
     const [isThemeOpen, setIsThemeOpen] = useState<boolean>(false);
 
@@ -28,14 +28,14 @@ export default function WearePage() {
     const themeList: WearingTheme[] = ["all", "countryside", "ocean", "winter", "hip", "fairy", "job", "lopan", "animal", "halloween"];
 
     const List = useMemo(() => {
-        return currentItem === "clothes"
+        return currentType === "clothes"
             ? ClothesData
-            : currentItem === "head"
+            : currentType === "head"
                 ? HeadData
-                : currentItem === "accessories"
+                : currentType === "accessories"
                     ? AccessoriesData
                     : null;
-    }, [currentItem]);
+    }, [currentType]);
 
     const clothesList: WearingItemType[] = List?.map((item) => ({
         ...item,
@@ -48,13 +48,13 @@ export default function WearePage() {
     ];
 
     const onClickItemImg = ({currentItem, isWearing}: { currentItem: string, isWearing: boolean }) => {
-        if (currentItem === "clothes") {
+        if (currentType === "clothes") {
             if (isWearing) dispatch(updateWearingItem({clothes: ""}));
             else dispatch(updateWearingItem({clothes: currentItem}));
-        } else if (currentItem === "head") {
+        } else if (currentType === "head") {
             if (isWearing) dispatch(updateWearingItem({head: ""}));
             else dispatch(updateWearingItem({head: currentItem}));
-        } else if (currentItem === "accessories") {
+        } else if (currentType === "accessories") {
             if (isWearing) dispatch(updateWearingItem({accessories: ""}));
             else dispatch(updateWearingItem({accessories: currentItem}));
         } else {
@@ -69,23 +69,23 @@ export default function WearePage() {
         <WearWrapper height={"100%"} verticalBottom horizontalCenter>
             <Flex width={"100%"} row spaceBetween center>
                 <Flex width={320} row flexStart verticalBottom style={{paddingLeft: 15}}>
-                    <TypeChangeButton center isLeft selected={currentItem === "clothes"}
-                                      onClick={() => setCurrentItem("clothes")}>
+                    <TypeChangeButton center isLeft selected={currentType === "clothes"}
+                                      onClick={() => setCurrentType("clothes")}>
                         <img src={"/assets/img/store/clothes_icon.svg"} alt={"옷"}/>
                     </TypeChangeButton>
                     <Line/>
-                    <TypeChangeButton center selected={currentItem === "head"}
-                                      onClick={() => setCurrentItem("head")}>
+                    <TypeChangeButton center selected={currentType === "head"}
+                                      onClick={() => setCurrentType("head")}>
                         <img src={"/assets/img/store/head_icon.svg"} alt={"머리 장식"}/>
                     </TypeChangeButton>
                     <Line/>
-                    <TypeChangeButton center selected={currentItem === "accessories"}
-                                      onClick={() => setCurrentItem("accessories")}>
+                    <TypeChangeButton center selected={currentType === "accessories"}
+                                      onClick={() => setCurrentType("accessories")}>
                         <img src={"/assets/img/store/accessories_icon.svg"} alt={"액세서리"}/>
                     </TypeChangeButton>
                     <Line/>
-                    <TypeChangeButton center isRight selected={currentItem === "item"}
-                                      onClick={() => setCurrentItem("item")}>
+                    <TypeChangeButton center isRight selected={currentType === "item"}
+                                      onClick={() => setCurrentType("item")}>
                         <img src={"/assets/img/store/item_icon.svg"} alt={"아이템"}/>
                     </TypeChangeButton>
                 </Flex>
@@ -119,13 +119,13 @@ export default function WearePage() {
             <ItemWrapper width={300} height={80} row verticalCenter>
                 {mergedList.map((item) => {
                     if (item.type === "button") return <></>
-                    const isWearing = currentItem === "clothes"
+                    const isWearing = currentType === "clothes"
                         ? wearingItem.clothes.includes(item.name)
-                        : currentItem === "head"
+                        : currentType === "head"
                             ? wearingItem.head.includes(item.name)
-                            : currentItem === "accessories"
+                            : currentType === "accessories"
                                 ? wearingItem.accessories.includes(item.name)
-                                : currentItem === "item"
+                                : currentType === "item"
                                     ? false  //나중에 아이템 하면 조건 추가.
                                     : false
                     ;
@@ -151,8 +151,8 @@ export default function WearePage() {
                                  onClick={() => onClickItemImg({currentItem: item.name, isWearing: isWearing})}>
                         <img src={`/assets/img/store/itemIcon/${item?.theme}.svg`}
                              style={{position: "absolute", width: 20, left: 4, bottom: 4, zIndex: 1}}/>
-                        <img src={`/assets/img/store/wear/${currentItem}/${item.name}.svg`}
-                             style={{scale: currentItem === "head" ? "0.5" : currentItem === "accessories" ? "0.7" : "1"}}/>
+                        <img src={`/assets/img/store/wear/${currentType}/${item.name}.svg`}
+                             style={{scale: currentType === "head" ? "0.5" : currentType === "accessories" ? "0.7" : "1"}}/>
                     </Flex>
                 })}
             </ItemWrapper>

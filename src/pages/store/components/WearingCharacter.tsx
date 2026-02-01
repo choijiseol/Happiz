@@ -59,13 +59,13 @@ export default function WearingCharacter() {
                      }}/>
             }
             {wearingItem.head &&
-                <img src={`/assets/img/store/wear/head/${wearingItem.head}.svg`}
+                <img src={`/assets/img/store/wear/headWearing/${wearingItem.head}.svg`}
                      style={{
                          position: "absolute",
                          scale: 1.5,
                          zIndex: 2,
-                         top: headTop,
-                         left: clothesLeft - 14
+                         top: headTop + 20,
+                         left: clothesLeft - 24
                      }}/>
             }
             <img src={`/assets/img/character/${character}1.svg`} style={{scale: 1.5}}/>
