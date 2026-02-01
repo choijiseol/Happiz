@@ -163,7 +163,7 @@ export default function WearePage() {
                     </ThemeToggleButton>
                 </ThemeFilterWrapper>
             </Flex>
-            <ItemWrapper width={300} height={80} row verticalCenter>
+            <ItemWrapper row verticalCenter>
                 {mergedList.map((item) => {
                     if (item.type === "button") return <></>
                     const isWearing = currentType === "clothes"
@@ -261,6 +261,9 @@ const Line = styled.div`
 `
 
 const ItemWrapper = styled(Flex)`
+    width: calc(100% - 20px);
+    height: 80px;
+    min-width: 300px;
     background-color: rgba(255, 255, 255, 0.7);
     border-radius: 10px;
     overflow-x: scroll;
