@@ -1,7 +1,7 @@
 import Flex from "../../common/components/Flex.tsx";
 import styled, {css} from "styled-components";
 import Header from "../../common/components/Header.tsx";
-import {useMemo, useState} from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
 import {
     AccessoriesData,
     ClothesData,
@@ -12,8 +12,9 @@ import {
 import {useDispatch, useSelector} from "react-redux";
 import type {RootState} from "../../redux/store.ts";
 import WearingCharacter from "./components/WearingCharacter.tsx";
-import {updateWearingItem} from "../../redux/userSlice.ts";
+import {setWearingItem, updateWearingItem, type User} from "../../redux/userSlice.ts";
 import {ButtonAnimation} from "../../common/components/styles/Button.ts";
+import {useNavigate} from "react-router";
 
 export default function WearePage() {
     const [currentType, setCurrentType] = useState<"clothes" | "head" | "accessories" | "item">("clothes");
@@ -22,8 +23,33 @@ export default function WearePage() {
 
     const buyItem = useSelector((state: RootState) => state.user.buyItem);
     const wearingItem = useSelector((state: RootState) => state.user.wearingItem);
+    const nickname = useSelector((state: RootState) => state.user.nickname);
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const initialWearingRef = useRef(wearingItem);
+    const savedRef = useRef(false);
+
+    useEffect(() => {
+        try {
+            const raw = localStorage.getItem("user");
+            if (raw && nickname) {
+                const users = JSON.parse(raw) as User[];
+                const me = users.find(u => u.nickname === nickname);
+                if (me?.wearingItem) {
+                    initialWearingRef.current = me.wearingItem;
+                }
+            }
+        } catch {
+            console.log("error while loading wearingItem from localStorage");
+        }
+        return () => {
+            if (!savedRef.current) {
+                dispatch(setWearingItem(initialWearingRef.current));
+            }
+        }
+    }, []);
 
     const themeList: WearingTheme[] = ["all", "countryside", "ocean", "winter", "hip", "fairy", "job", "lopan", "animal", "halloween"];
 
@@ -62,9 +88,30 @@ export default function WearePage() {
         }
     }
 
+    const handleBefore = () => {
+        if (!savedRef.current) {
+            dispatch(setWearingItem(initialWearingRef.current));
+        }
+        navigate(-1);
+    };
+
+    const handleSave = () => {
+        try {
+            const raw = localStorage.getItem("user");
+            if (!raw) return;
+            const users = JSON.parse(raw) as User[];
+            const updated = users.map(u => u.nickname === nickname ? { ...u, wearingItem } : u);
+            localStorage.setItem("user", JSON.stringify(updated));
+            savedRef.current = true;
+            alert("저장 완료");
+        } catch {
+            console.log("error while saving wearingItem to localStorage");
+        }
+    };
+
     return <Wrapper>
         <BackBlur/>
-        <Header hasBefore hasSave/>
+        <Header hasBefore hasSave onBefore={handleBefore} onSave={handleSave}/>
         <WearingCharacter/>
         <WearWrapper height={"100%"} verticalBottom horizontalCenter>
             <Flex width={"100%"} row spaceBetween center>

@@ -10,6 +10,6 @@ export const ButtonAnimation = styled(Flex)`
     }
 
     &:active {
-        transform: scale(0.7);
+        transform: scale(0.8);
     }
 `

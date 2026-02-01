@@ -8,14 +8,16 @@ import {ButtonAnimation} from "./styles/Button.ts";
 import {useNavigate} from "react-router";
 import {setColorLevel} from "../../redux/gameSlice.ts";
 
-export default function Header({hasCoin, hasSetting, hasBefore, hasSave, isGame, setOpenSetting, setOpenPurchase}: {
+export default function Header({hasCoin, hasSetting, hasBefore, hasSave, isGame, setOpenSetting, setOpenPurchase, onBefore, onSave}: {
     hasCoin?: boolean,
     hasSetting?: boolean,
     hasBefore?: boolean,
     hasSave?: boolean
     isGame?: boolean,
     setOpenSetting?: (set: boolean) => void,
-    setOpenPurchase?: React.Dispatch<React.SetStateAction<boolean>> | null
+    setOpenPurchase?: React.Dispatch<React.SetStateAction<boolean>> | null,
+    onBefore?: () => void,
+    onSave?: () => void,
 }) {
     const navigate = useNavigate();
     const coin = useSelector((state: RootState) => state.user.coin);
@@ -24,12 +26,20 @@ export default function Header({hasCoin, hasSetting, hasBefore, hasSave, isGame,
 
     const dispatch = useDispatch();
     const onClickBefore = () => {
+        if (onBefore) {
+            onBefore();
+            return;
+        }
         if (isGame) dispatch(setColorLevel(1));
         if (setOpenPurchase) setOpenPurchase(false);
         else navigate(-1);
     }
 
     const onClickSave = () => {
+        if (onSave) {
+            onSave();
+            return;
+        }
         const storedUser = localStorage.getItem("user");
         if (!storedUser) return;
 
