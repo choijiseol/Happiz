@@ -216,7 +216,7 @@ export default function GameGuidPage() {
                     </CointGuidWrapper>
                 </CoinWrapper>
                 <Flex onClick={() => navigate(`/game/${type}/play`)}>
-                    <RoundButton text={"선택"}/>
+                    <RoundButton text={"START"}/>
                 </Flex>
             </ModalWrapper>
         </Flex>
