@@ -79,8 +79,7 @@ export default function TimeGamePage() {
         let coin = 0;
         if (Math.round(diff * 100) === 0) coin = 20;
         else if (diff <= 0.5) coin = 10;
-        else if (diff <= 1.5) coin = 5;
-        else if (diff <= 2.99) coin = 1;
+        else if (diff <= 1) coin = 3;
         else coin = 0;
 
         setTimeout(() => {

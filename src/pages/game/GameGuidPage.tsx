@@ -96,10 +96,24 @@ const gameCoinGuides: Record<GameType, (coin: CoinType) => React.ReactNode> = {
     </Flex>,
     time: (coin) => <Flex gap={10}>
         <Flex gap={5}>
-            <Text fontSize={12} fontWeight={400} color={"#000000"}>맞추는 시간에 따라</Text>
+            <Text fontSize={12} fontWeight={400} color={"#000000"}>+/- 1.00</Text>
             <Flex gap={6} row verticalCenter>
                 <img src={`/assets/img/coin/${coin}.svg`} alt="coin" width={18}/>
-                <Text fontSize={18} fontWeight={700} color={"#000000"}>+1 ~ +5</Text>
+                <Text fontSize={18} fontWeight={700} color={"#000000"}>+3</Text>
+            </Flex>
+        </Flex>
+        <Flex gap={5}>
+            <Text fontSize={12} fontWeight={400} color={"#000000"}>+/- 0.50</Text>
+            <Flex gap={6} row verticalCenter>
+                <img src={`/assets/img/coin/${coin}.svg`} alt="coin" width={18}/>
+                <Text fontSize={18} fontWeight={700} color={"#000000"}>+10</Text>
+            </Flex>
+        </Flex>
+        <Flex gap={5}>
+            <Text fontSize={12} fontWeight={400} color={"#000000"}>+/- 0.00</Text>
+            <Flex gap={6} row verticalCenter>
+                <img src={`/assets/img/coin/${coin}.svg`} alt="coin" width={18}/>
+                <Text fontSize={18} fontWeight={700} color={"#000000"}>+20</Text>
             </Flex>
         </Flex>
     </Flex>,
