@@ -19,7 +19,7 @@ export default function FinishModal({fall, clear, levelCoin, gameFinish, setStar
     gameFinish: boolean,
     setStart: React.Dispatch<React.SetStateAction<boolean>>,
     setIsClear: React.Dispatch<React.SetStateAction<"CLEAR" | "PLAY" | "FALL">>,
-    gameType?: "color" | "picture",
+    gameType?: "color" | "picture" | "time",
 }) {
     const colorLevel = useSelector((state: RootState) => state.game.colorLevel);
     const pictureLevel = useSelector((state: RootState) => state.game.pictureLevel);
@@ -32,7 +32,7 @@ export default function FinishModal({fall, clear, levelCoin, gameFinish, setStar
     const onClickNextButton = () => {
         if (clear) {
             if (gameType === "picture") dispatch(setPictureLevel(pictureLevel + 1));
-            else dispatch(setColorLevel(colorLevel + 1));
+            else if (gameType === "color") dispatch(setColorLevel(colorLevel + 1));
         }
         setStart(true);
         setIsClear("PLAY");
@@ -75,14 +75,17 @@ export default function FinishModal({fall, clear, levelCoin, gameFinish, setStar
                 </Flex>
                 : clear ? <Flex height={"100%"} gap={60} center>
                         <Flex gap={10} center>
-                            <BoldText>{(gameType === "picture" ? pictureLevel : colorLevel)}단계 CLEAR!!</BoldText>
+                            {gameType === "time"
+                                ? <BoldText>CLEAR!!</BoldText>
+                                : <BoldText>{(gameType === "picture" ? pictureLevel : colorLevel)}단계 CLEAR!!</BoldText>
+                            }
                             <CoinWrapper gap={5} row center>
                                 <img src={`/assets/img/coin/${coin}.svg`} alt="coin" height={38}/>
                                 <Text fontSize={28} fontWeight={700} color={"#00496F"}>+{levelCoin}</Text>
                             </CoinWrapper>
                         </Flex>
                         <Flex onClick={onClickNextButton}>
-                            <RoundButton text={"다음 단계"}/>
+                            <RoundButton text={gameType === "time" ? "다시하기" : "다음 단계"}/>
                         </Flex>
                     </Flex>
                     : <></>
